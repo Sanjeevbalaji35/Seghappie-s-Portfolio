@@ -48,16 +48,23 @@
   <main class="flex-grow max-w-5xl mx-auto w-full px-6 py-12">
     
     <section id="tab-bio" class="content-tab active space-y-16 animate-in fade-in duration-300">
-      <div class="grid md:grid-cols-3 gap-12 items-center">
+      <div class="grid md:grid-cols-3 gap-12 items-stretch">
         
-        <div class="bg-white border border-stone-200 rounded-3xl p-8 space-y-4 text-center shadow-sm md:col-span-1">
-          <div class="w-24 h-24 bg-stone-900 text-white rounded-full mx-auto flex items-center justify-center text-2xl font-black tracking-widest shadow-inner">SB</div>
-          <div>
-            <h3 class="font-black text-stone-900 uppercase tracking-wide text-lg">Sanjeev Balaji</h3>
+        <div class="bg-white border border-stone-200 rounded-3xl p-6 flex flex-col justify-between shadow-sm md:col-span-1 min-h-[480px]">
+          <div class="space-y-6 flex-grow flex flex-col justify-center">
+            <div class="w-full aspect-[4/5] bg-stone-100 rounded-2xl overflow-hidden border border-stone-200 shadow-inner flex items-center justify-center relative group">
+              <span class="text-stone-400 text-xs font-bold uppercase tracking-wider absolute group-hover:opacity-0 transition-opacity">Photo Slot</span>
+              <img src="profile.png" alt="Sanjeev Balaji" class="w-full h-full object-cover font-bold text-xs text-center text-stone-400 pt-20" onerror="this.style.display='none'">
+            </div>
+            
+            <div class="text-center space-y-1">
+              <h3 class="font-black text-stone-900 uppercase tracking-wide text-2xl">Sanjeev Balaji</h3>
+              <p class="text-xs font-extrabold text-[#943A3A] uppercase tracking-widest bg-red-50 border border-red-100 px-3 py-1 rounded-full inline-block">Very Good Human</p>
+            </div>
           </div>
         </div>
 
-        <div class="md:col-span-2 space-y-6">
+        <div class="md:col-span-2 flex flex-col justify-center space-y-6">
           <span class="text-xs font-bold uppercase tracking-widest text-stone-500 bg-stone-100 border border-stone-200 px-3 py-1 rounded-full inline-block">The Master Dashboard</span>
           <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-stone-900 uppercase leading-tight">
             Ideas. Works. <br/>Career. Blogs.
@@ -88,125 +95,53 @@
       </div>
 
       <div class="relative border-l border-stone-200 ml-4 pl-8 space-y-12">
-        
         <div class="relative">
           <div class="absolute -left-[41px] top-1 bg-stone-900 border-4 border-[#FAFAF9] rounded-full w-5 h-5"></div>
           <span class="text-[10px] font-extrabold text-[#943A3A] uppercase tracking-widest bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-md inline-block mb-3">Venture Log #02</span>
-          
           <div class="bg-white border border-stone-200 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4">
-            <div class="flex justify-between items-start flex-wrap gap-2">
-              <h3 class="text-xl font-black text-stone-900 uppercase tracking-wide">Wachsen Hoch: Engineering the Visibility Matrix</h3>
-              <span class="text-[10px] font-bold uppercase tracking-wider bg-stone-900 text-white px-2 py-1 rounded-md">Active Operation</span>
-            </div>
-            <p class="text-stone-600 text-sm leading-relaxed font-medium">
-              After launching the Akku Custom Furniture ecosystem, I collided immediately with the ultimate reality of any modern venture: <strong>uncompromising execution requires high-velocity visibility.</strong> Instead of outsourcing traffic management and data infrastructure to external corporate marketing teams, I took the ultimate builder path—I scaled the skill set natively. This gave birth to Wachsen Hoch, a digital growth and performance marketing organization designed to scale absolute market reach.
-            </p>
-            <div class="flex flex-wrap gap-1 pt-2">
-              <span class="bg-stone-50 border border-stone-200 text-[10px] font-bold text-stone-500 px-2 py-0.5 rounded uppercase">Wachsen Hoch</span>
-              <span class="bg-stone-50 border border-stone-200 text-[10px] font-bold text-stone-500 px-2 py-0.5 rounded uppercase">Growth Engineering</span>
-            </div>
+            <h3 class="text-xl font-black text-stone-900 uppercase tracking-wide">Wachsen Hoch: Engineering the Visibility Matrix</h3>
+            <p class="text-stone-600 text-sm leading-relaxed font-medium">After launching the Akku Custom Furniture ecosystem, I scaling the skill set natively. This gave birth to Wachsen Hoch, a digital growth and performance marketing organization designed to scale absolute market reach.</p>
           </div>
         </div>
 
         <div class="relative">
           <div class="absolute -left-[41px] top-1 bg-stone-400 border-4 border-[#FAFAF9] rounded-full w-5 h-5"></div>
           <span class="text-[10px] font-extrabold text-stone-400 uppercase tracking-widest bg-stone-100 border px-2.5 py-0.5 rounded-md inline-block mb-3">Venture Log #01</span>
-          
           <div class="bg-white border border-stone-200 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4">
             <h3 class="text-xl font-black text-stone-800 uppercase tracking-wide">The Sleepless Night: How a Console Table Sparked a Design System</h3>
-            <p class="text-stone-600 text-sm leading-relaxed font-medium">
-              It started on a completely fine day that bled into a restless, sleepless night. Earlier, I had ordered a console table through Amazon. When it arrived, it was a very simple design. It was worth the money for what it was, but it wasn't great. It lacked structural presence, and it cost significantly too much for a mass-produced item. That night, I decided to engineer a direct, practical customization pipeline.
-            </p>
-            <div class="flex flex-wrap gap-1 pt-2">
-              <span class="bg-stone-50 border border-stone-200 text-[10px] font-bold text-stone-400 px-2 py-0.5 rounded uppercase">Akku Origins</span>
-              <span class="bg-stone-50 border border-stone-200 text-[10px] font-bold text-stone-400 px-2 py-0.5 rounded uppercase">Custom Fabrication</span>
-            </div>
+            <p class="text-stone-600 text-sm leading-relaxed font-medium">It started on a completely fine day that bled into a restless, sleepless night. That night, I decided to engineer a direct, practical customization pipeline for furniture fabrication.</p>
           </div>
         </div>
-
       </div>
     </section>
 
     <section id="tab-books" class="content-tab max-w-3xl mx-auto py-4">
       <div class="mb-12">
-        <div class="flex justify-between items-center flex-wrap gap-4">
-          <div>
-            <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Manuscripts & Draft Terminal</h2>
-            <p class="text-xs text-stone-500 font-bold uppercase tracking-wider mt-1">Deconstructing human operating systems under maximum stress load parameters</p>
-          </div>
-          <span class="text-[10px] font-extrabold uppercase bg-amber-50 text-amber-800 border border-amber-200 px-3 py-1 rounded-full">Project Phase: Draft 01</span>
-        </div>
+        <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Manuscripts & Draft Terminal</h2>
       </div>
-
-      <div class="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-        <div class="space-y-2">
-          <span class="text-[10px] font-black uppercase tracking-widest text-stone-400">Current Working Title</span>
-          <h3 class="text-2xl font-black text-stone-900 uppercase tracking-tight">[ Unnamed Project on Emotional Intelligence ]</h3>
-          <p class="text-stone-500 text-xs font-bold uppercase tracking-wide">A practical operational guide to navigating hyper-stress, systemic overload, and reactive emotional states</p>
-        </div>
-        <div class="w-full h-[1px] bg-stone-100"></div>
-        <p class="text-stone-600 text-sm leading-relaxed font-medium">
-          This book is born out of personal reality. When I audited my own environment to trace a growing baseline of irritability, the data pointed cleanly to an aggressive overload matrix: taxing night shift dynamics, broken sleep cycles, and the weight of managing every operational task alone. Having engineered a recovery blueprint, this book serves as a tactical guide to breaking the irritation loop and handling tough times in a calm, high-utility way.
-        </p>
+      <div class="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
+        <h3 class="text-2xl font-black text-stone-900 uppercase tracking-tight">[ Unnamed Project on Emotional Intelligence ]</h3>
+        <p class="text-stone-600 text-sm leading-relaxed font-medium">This book serves as a tactical guide to breaking the irritation loop and handling tough times in a calm, high-utility way based directly on overcoming sleep disruptions, intense shift work stress, and environmental overload.</p>
       </div>
     </section>
 
     <section id="tab-career" class="content-tab max-w-3xl mx-auto py-4">
       <div class="mb-12">
-        <div class="flex justify-between items-center flex-wrap gap-4">
-          <div>
-            <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Project Management Terminal</h2>
-            <p class="text-xs text-stone-500 font-bold uppercase tracking-wider mt-1">Lifecycle execution, scope alignment, and cross-functional team delivery</p>
-          </div>
-          <span class="text-[10px] font-extrabold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1 rounded-full">PMP Tracker Slot</span>
-        </div>
+        <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Project Management Terminal</h2>
       </div>
-
-      <div class="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-        <div class="space-y-2">
-          <span class="text-[10px] font-black uppercase tracking-widest text-stone-400">Professional Alignment</span>
-          <h3 class="text-2xl font-black text-stone-900 uppercase tracking-tight">PMP Certified Project Manager</h3>
-          <p class="text-stone-500 text-xs font-bold uppercase tracking-wide">Neutral, Objective-Driven Execution Strategy</p>
-        </div>
-        <div class="w-full h-[1px] bg-stone-100"></div>
-        <p class="text-stone-600 text-sm leading-relaxed font-medium">
-          As a dedicated Project Manager holding comprehensive engineering foundations, my operational approach is strictly anchored in clarity, structured timelines, and high-efficiency deliverables. I operate as an intensely hardworking and highly adaptive specialist, adjusting execution strategies seamlessly to match shifting commercial parameters and target constraints.
-        </p>
+      <div class="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
+        <h3 class="text-2xl font-black text-stone-900 uppercase tracking-tight">PMP Certified Project Manager</h3>
+        <p class="text-stone-600 text-sm leading-relaxed font-medium">An adaptive and flexible strategy focused entirely on scope execution and absolute goal attainment.</p>
       </div>
     </section>
 
-    <section id="tab-pipeline" class="content-tab max-w-3xl mx-auto py-4 animate-in fade-in duration-300">
+    <section id="tab-pipeline" class="content-tab max-w-3xl mx-auto py-4">
       <div class="mb-12">
         <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Infolder Concepts & Pipeline</h2>
-        <p class="text-xs text-stone-500 font-bold uppercase tracking-wider mt-1">Syllabus blueprints for upcoming engineering execution models and structural actions</p>
       </div>
-
       <div class="grid md:grid-cols-2 gap-6">
-        <div class="bg-white border border-stone-200 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4 flex flex-col justify-between">
-          <div class="space-y-2">
-            <span class="text-[9px] font-extrabold uppercase tracking-widest bg-stone-100 text-stone-700 px-2 py-0.5 rounded border border-stone-200 inline-block">Architecture Core</span>
-            <h3 class="text-lg font-black uppercase tracking-tight text-stone-900">Custom Designed Automobiles</h3>
-            <p class="text-stone-600 text-xs sm:text-sm leading-relaxed font-medium">
-              Bringing core mechanical engineering training back to structural high-performance mobility assets. Moving beyond mass catalog options to design custom internal configurations, bespoke panel integrations, and custom vehicles built specifically around individual space parameters, sharp dynamics, and physical cabin ergonomics.
-            </p>
-          </div>
-          <div class="text-[10px] font-bold uppercase tracking-wider text-stone-400 border-t pt-3 flex items-center gap-1.5">
-            <span class="animate-pulse text-stone-500">⏳</span> Status: Blueprint Modeling Phase
-          </div>
-        </div>
-
-        <div class="bg-white border border-stone-200 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4 flex flex-col justify-between">
-          <div class="space-y-2">
-            <span class="text-[9px] font-extrabold uppercase tracking-widest bg-stone-100 text-stone-700 px-2 py-0.5 rounded border border-stone-200 inline-block">Logistics & Service</span>
-            <h3 class="text-lg font-black uppercase tracking-tight text-stone-900">Environmental Waste Clearing NGO</h3>
-            <p class="text-stone-600 text-xs sm:text-sm leading-relaxed font-medium">
-              An objective-driven, non-governmental structural operations network dedicated to cleaning mismanaged waste on the Earth immediately around us. Treating environmental sanitation not merely as an abstract philosophy, but as a hard logistical supply chain problem requiring tactical sorting management, strict collection schedules, and scalable community mobilization models.
-            </p>
-          </div>
-          <div class="text-[10px] font-bold uppercase tracking-wider text-stone-400 border-t pt-3 flex items-center gap-1.5">
-            <span class="animate-pulse text-stone-500">⏳</span> Status: Regional Scope Mapping
-          </div>
-        </div>
+        <div class="bg-white border border-stone-200 p-6 rounded-2xl shadow-sm"><h4 class="font-black uppercase text-stone-900">Custom Designed Automobiles</h4></div>
+        <div class="bg-white border border-stone-200 p-6 rounded-2xl shadow-sm"><h4 class="font-black uppercase text-stone-900">Environmental Waste Clearing NGO</h4></div>
       </div>
     </section>
 
@@ -215,7 +150,7 @@
   <footer class="bg-stone-100 text-stone-600 py-10 text-center border-t border-stone-200">
     <div class="max-w-5xl mx-auto px-6 flex flex-col items-center gap-3">
       <span class="font-black tracking-tight text-stone-900 uppercase text-sm">Sanjeev Balaji Portfolio</span>
-      <p class="text-xs text-stone-500 font-medium">© 2026 Selvaraj Sanjeev Balaji. Built cleanly for static performance platforms.</p>
+      <p class="text-xs text-stone-500 font-medium">© 2026 Selvaraj Sanjeev Balaji.</p>
     </div>
   </footer>
 
@@ -223,7 +158,6 @@
     function switchTab(targetTabId) {
       document.querySelectorAll('.content-tab').forEach(tab => tab.classList.remove('active'));
       document.getElementById('tab-' + targetTabId).classList.add('active');
-
       document.querySelectorAll('.portfolio-nav-btn').forEach(btn => {
         btn.classList.remove('text-stone-900', 'bg-stone-200/60');
         btn.classList.add('text-stone-600');
