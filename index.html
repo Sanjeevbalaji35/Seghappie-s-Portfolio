@@ -88,7 +88,7 @@
               <div id="img-placeholder-text" class="hidden text-stone-400 text-xs font-bold uppercase tracking-wider">Photo Frame Active</div>
               
               <label class="hidden admin-action-btn absolute bottom-3 left-3 right-3 bg-stone-900/80 hover:bg-stone-900 text-white text-[10px] font-bold uppercase tracking-wider py-2 px-3 rounded-xl justify-center items-center gap-1 cursor-pointer transition-all backdrop-blur-sm shadow">
-                📸 Browse Offline Files
+                📸 Select Profile Photo
                 <input type="file" id="profile-file-picker" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
               </label>
             </div>
@@ -107,6 +107,18 @@
           <h1 id="intro-headline" class="editable-field text-4xl sm:text-5xl font-extrabold tracking-tight text-stone-900 uppercase leading-tight">Ideas. Works. <br/>Career. Blogs.</h1>
           <p id="intro-body" class="editable-field text-stone-600 font-medium leading-relaxed text-base sm:text-lg">This is the definitive portfolio of my personal blueprints, high-level career concepts, and active live blogs. From mechanical engineering principles to launching hyper-custom industrial spaces like Akku Hybrid Systems, I don't just draft concepts—I construct them flawlessly.</p>
           <p class="text-stone-700 font-bold leading-relaxed text-sm uppercase tracking-wide bg-stone-100 p-5 border border-stone-200 rounded-2xl">📢 Consider this your primary pipeline monitor. Bookmark this hub and visit often to keep tabs on current project status modules, lifecycle milestones, and deployment logs as they drop live.</p>
+          
+          <div class="pt-2 flex flex-wrap gap-3">
+            <button onclick="switchTab('story')" class="bg-stone-900 text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:bg-stone-800 shadow-sm">
+              Read Live Timelines
+            </button>
+            <a href="https://akkucustomfurniture.vercel.app/" target="_blank" class="border border-stone-300 bg-white text-stone-900 font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:bg-stone-50 shadow-sm flex items-center gap-2">
+              Launch Akku Systems ↗
+            </a>
+            <a href="/agency.html" id="wachsen-hoch-link" class="border border-[#943A3A] bg-red-50/50 text-[#943A3A] font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:bg-red-50 shadow-sm flex items-center gap-2">
+              Launch Wachsen Hoch ⚡
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -117,37 +129,33 @@
           <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">The Journey Archive</h2>
           <p class="text-xs text-stone-500 font-bold uppercase tracking-wider mt-1">Real-time lifecycle updates, structural realizations, and venture deployments</p>
         </div>
-        <button onclick="createNewVentureLog()" class="hidden admin-action-btn bg-stone-900 text-white font-extrabold text-[10px] uppercase tracking-wider px-4 py-2.5 rounded-xl hover:bg-stone-800 items-center gap-1.5 shadow">
-          ＋ Add Venture Log
-        </button>
+        <button onclick="createNewVentureLog()" class="hidden admin-action-btn bg-stone-900 text-white font-extrabold text-[10px] uppercase tracking-wider px-4 py-2.5 rounded-xl hover:bg-stone-800 items-center gap-1.5 shadow">＋ Add Venture Log</button>
       </div>
-
-      <div id="timeline-stack" class="relative border-l border-stone-200 ml-4 pl-8 space-y-12">
-        </div>
+      <div id="timeline-stack" class="relative border-l border-stone-200 ml-4 pl-8 space-y-12"></div>
     </section>
 
     <section id="tab-books" class="content-tab max-w-3xl mx-auto py-4">
-      <div class="mb-12"><h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Manuscripts & Draft Terminal</h2></div>
-      <div class="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
-        <h3 id="book-title" class="editable-field text-2xl font-black text-stone-900 uppercase tracking-tight">[ Unnamed Project on Emotional Intelligence ]</h3>
-        <p id="book-body" class="editable-field text-stone-600 text-sm leading-relaxed font-medium">This book serves as a tactical guide to breaking the irritation loop and handling tough times in a calm, high-utility way based directly on overcoming sleep disruptions, intense shift work stress, and environmental overload.</p>
+      <div class="mb-12 flex justify-between items-center flex-wrap gap-4">
+        <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Manuscripts & Draft Terminal</h2>
+        <button onclick="createNewBookLog()" class="hidden admin-action-btn bg-stone-900 text-white font-extrabold text-[10px] uppercase tracking-wider px-4 py-2.5 rounded-xl hover:bg-stone-800 items-center gap-1.5 shadow">＋ Add Book Draft</button>
       </div>
+      <div id="book-stack" class="space-y-6"></div>
     </section>
 
     <section id="tab-career" class="content-tab max-w-3xl mx-auto py-4">
-      <div class="mb-12"><h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Project Management Terminal</h2></div>
-      <div class="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
-        <h3 id="career-title" class="editable-field text-2xl font-black text-stone-900 uppercase tracking-tight">PMP Certified Project Manager</h3>
-        <p id="career-body" class="editable-field text-stone-600 text-sm leading-relaxed font-medium">An adaptive and flexible strategy focused entirely on scope execution and absolute goal attainment.</p>
+      <div class="mb-12 flex justify-between items-center flex-wrap gap-4">
+        <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Project Management Terminal</h2>
+        <button onclick="createNewCareerLog()" class="hidden admin-action-btn bg-stone-900 text-white font-extrabold text-[10px] uppercase tracking-wider px-4 py-2.5 rounded-xl hover:bg-stone-800 items-center gap-1.5 shadow">＋ Add Career Log</button>
       </div>
+      <div id="career-stack" class="space-y-6"></div>
     </section>
 
     <section id="tab-pipeline" class="content-tab max-w-3xl mx-auto py-4">
-      <div class="mb-12"><h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Infolder Concepts & Pipeline</h2></div>
-      <div class="grid md:grid-cols-2 gap-6">
-        <div class="bg-white border border-stone-200 p-6 rounded-2xl shadow-sm"><h4 id="pipe-title-1" class="editable-field font-black uppercase text-stone-900">Custom Designed Automobiles</h4></div>
-        <div class="bg-white border border-stone-200 p-6 rounded-2xl shadow-sm"><h4 id="pipe-title-2" class="editable-field font-black uppercase text-stone-900">Environmental Waste Clearing NGO</h4></div>
+      <div class="mb-12 flex justify-between items-center flex-wrap gap-4">
+        <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Infolder Concepts & Pipeline</h2>
+        <button onclick="createNewPipelineLog()" class="hidden admin-action-btn bg-stone-900 text-white font-extrabold text-[10px] uppercase tracking-wider px-4 py-2.5 rounded-xl hover:bg-stone-800 items-center gap-1.5 shadow">＋ Add Pipeline Idea</button>
       </div>
+      <div id="pipeline-grid" class="grid md:grid-cols-2 gap-6"></div>
     </section>
 
   </main>
@@ -160,54 +168,46 @@
   </footer>
 
   <script>
-    // System Baseline Array Structure for Defaults
+    // Universal Core System Arrays Default Payload Matrix
     const defaultTimelineData = [
-      { id: "log-2", marker: "Venture Log #02", title: "Wachsen Hoch: Engineering the Visibility Matrix", body: "After launching the Akku Custom Furniture ecosystem, I scaled the skill set natively. This gave birth to Wachsen Hoch, a digital growth organization designed to scale absolute market reach." },
+      { id: "log-2", marker: "Venture Log #02", title: "Wachsen Hoch: Performance Venture & Visibility Optimization", body: "A flexible B2B growth consulting architecture engineered to transition projects, creative books, manufacturers, or service models online. We build e-commerce structures, run targeted marketing campaigns, structure operational PMO lines, and orchestrate cross-border corporate setup routes into Dubai." },
       { id: "log-1", marker: "Venture Log #01", title: "The Sleepless Night: How a Console Table Sparked a Design System", body: "It started on a completely fine day that bled into a restless, sleepless night. That night, I decided to engineer a direct, practical customization pipeline for furniture fabrication." }
     ];
 
+    const defaultBookData = [
+      { id: "b1", title: "[ Unnamed Project on Emotional Intelligence ]", body: "This book serves as a tactical guide to breaking the irritation loop and handling tough times in a calm, high-utility way based directly on overcoming sleep disruptions, intense shift work stress, and environmental overload." }
+    ];
+
+    const defaultCareerData = [
+      { id: "c1", title: "PMP Certified Project Manager", body: "An adaptive and flexible strategy focused entirely on scope execution and absolute goal attainment." }
+    ];
+
+    const defaultPipelineData = [
+      { id: "p1", title: "Custom Designed Automobiles" },
+      { id: "p2", title: "Environmental Waste Clearing NGO" }
+    ];
+
     document.addEventListener("DOMContentLoaded", () => {
-      // Load image data if saved
+      // High-Priority cross-platform mobile cache photo retrieval
       if(localStorage.getItem("custom-profile-pic")) {
         document.getElementById("profile-display-img").src = localStorage.getItem("custom-profile-pic");
         document.getElementById("img-placeholder-text").classList.add('hidden');
       }
 
-      // Load standard profile/text modifications
-      const fields = ["profile-name", "profile-tag", "intro-headline", "intro-body", "book-title", "book-body", "career-title", "career-body", "pipe-title-1", "pipe-title-2"];
+      const fields = ["profile-name", "profile-tag", "intro-headline", "intro-body"];
       fields.forEach(id => {
         if(localStorage.getItem(id)) document.getElementById(id).innerText = localStorage.getItem(id);
       });
 
-      // Render Timeline logs safely from local payload data arrays
-      renderTimelineList();
+      // Synchronize Framework Initial Renders
+      renderAllDynamicModules();
     });
 
-    function renderTimelineList() {
-      const container = document.getElementById("timeline-stack");
-      container.innerHTML = "";
-      
-      const logs = localStorage.getItem("timeline-logs-list") 
-        ? JSON.parse(localStorage.getItem("timeline-logs-list"))
-        : defaultTimelineData;
-
-      logs.forEach(item => {
-        const block = document.createElement("div");
-        block.className = "relative";
-        block.innerHTML = `
-          <div class="absolute -left-[41px] top-1 bg-stone-900 border-4 border-[#FAFAF9] rounded-full w-5 h-5"></div>
-          <span class="text-[10px] font-extrabold text-[#943A3A] uppercase tracking-widest bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-md inline-block mb-3">${item.marker}</span>
-          <div class="bg-white border border-stone-200 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4">
-            <h3 id="title-${item.id}" class="editable-field text-xl font-black text-stone-900 uppercase tracking-wide">${item.title}</h3>
-            <p id="body-${item.id}" class="editable-field text-stone-600 text-sm leading-relaxed font-medium">${item.body}</p>
-          </div>
-        `;
-        container.appendChild(block);
-      });
-
-      if (document.body.classList.contains("admin-mode")) {
-        document.querySelectorAll('#timeline-stack .editable-field').forEach(el => el.contentEditable = "true");
-      }
+    function renderAllDynamicModules() {
+      renderTimelineList();
+      renderBookList();
+      renderCareerList();
+      renderPipelineGrid();
     }
 
     function handleImageUpload(event) {
@@ -224,76 +224,143 @@
       }
     }
 
-    function createNewVentureLog() {
-      const currentLogs = localStorage.getItem("timeline-logs-list") 
-        ? JSON.parse(localStorage.getItem("timeline-logs-list"))
-        : [...defaultTimelineData];
-
-      const newId = "custom-" + Date.now();
-      const count = currentLogs.length + 1;
-      
-      currentLogs.unshift({
-        id: newId,
-        marker: `Venture Log #0${count}`,
-        title: "NEW UNTITLED VENTURE STRUCTURE",
-        body: "Click inside this text space to draft your project parameters on-screen."
+    // ─── RENDERING ACTIONS ───
+    function renderTimelineList() {
+      const container = document.getElementById("timeline-stack"); container.innerHTML = "";
+      const data = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : defaultTimelineData;
+      data.forEach(item => {
+        const block = document.createElement("div"); block.className = "relative";
+        block.innerHTML = `
+          <div class="absolute -left-[41px] top-1 bg-stone-900 border-4 border-[#FAFAF9] rounded-full w-5 h-5"></div>
+          <span class="text-[10px] font-extrabold text-[#943A3A] uppercase tracking-widest bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-md inline-block mb-3">${item.marker}</span>
+          <div class="bg-white border border-stone-200 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4">
+            <h3 id="t-title-${item.id}" class="editable-field text-xl font-black text-stone-900 uppercase tracking-wide">${item.title}</h3>
+            <p id="t-body-${item.id}" class="editable-field text-stone-600 text-sm leading-relaxed font-medium">${item.body}</p>
+          </div>`;
+        container.appendChild(block);
       });
-
-      localStorage.setItem("timeline-logs-list", JSON.stringify(currentLogs));
-      renderTimelineList();
+      setEditableStates();
     }
 
-    function toggleAdminPanel() {
-      document.getElementById('admin-modal').classList.toggle('hidden');
+    function renderBookList() {
+      const container = document.getElementById("book-stack"); container.innerHTML = "";
+      const data = localStorage.getItem("book-logs-list") ? JSON.parse(localStorage.getItem("book-logs-list")) : defaultBookData;
+      data.forEach(item => {
+        const div = document.createElement("div"); div.className = "bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4";
+        div.innerHTML = `<h3 id="b-title-${item.id}" class="editable-field text-2xl font-black text-stone-900 uppercase tracking-tight">${item.title}</h3>
+                         <p id="b-body-${item.id}" class="editable-field text-stone-600 text-sm leading-relaxed font-medium">${item.body}</p>`;
+        container.appendChild(div);
+      });
+      setEditableStates();
     }
 
-    function verifyAdminAccess() {
-      const input = document.getElementById('admin-pass-input').value;
-      if (input === "akku2026") {
-        document.body.classList.add('admin-mode');
+    function renderCareerList() {
+      const container = document.getElementById("career-stack"); container.innerHTML = "";
+      const data = localStorage.getItem("career-logs-list") ? JSON.parse(localStorage.getItem("career-logs-list")) : defaultCareerData;
+      data.forEach(item => {
+        const div = document.createElement("div"); div.className = "bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4";
+        div.innerHTML = `<h3 id="c-title-${item.id}" class="editable-field text-2xl font-black text-stone-900 uppercase tracking-tight">${item.title}</h3>
+                         <p id="c-body-${item.id}" class="editable-field text-stone-600 text-sm leading-relaxed font-medium">${item.body}</p>`;
+        container.appendChild(div);
+      });
+      setEditableStates();
+    }
+
+    function renderPipelineGrid() {
+      const container = document.getElementById("pipeline-grid"); container.innerHTML = "";
+      const data = localStorage.getItem("pipeline-logs-list") ? JSON.parse(localStorage.getItem("pipeline-logs-list")) : defaultPipelineData;
+      data.forEach(item => {
+        const div = document.createElement("div"); div.className = "bg-white border border-stone-200 p-6 rounded-2xl shadow-sm";
+        div.innerHTML = `<h4 id="p-title-${item.id}" class="editable-field font-black uppercase text-stone-900">${item.title}</h4>`;
+        container.appendChild(div);
+      });
+      setEditableStates();
+    }
+
+    // ─── ADDING ACTIONS ───
+    function createNewVentureLog() {
+      const list = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : [...defaultTimelineData];
+      list.unshift({ id: "tl-" + Date.now(), marker: `Venture Log #0${list.length + 1}`, title: "NEW DYNAMIC VENTURE CAPABILITY", body: "Click here to summarize project mechanics." });
+      localStorage.setItem("timeline-logs-list", JSON.stringify(list)); renderTimelineList();
+    }
+
+    function createNewBookLog() {
+      const list = localStorage.getItem("book-logs-list") ? JSON.parse(localStorage.getItem("book-logs-list")) : [...defaultBookData];
+      list.unshift({ id: "bk-" + Date.now(), title: "[ NEW UNTITLED MANUSCRIPT ENTRY ]", body: "Click here to draft framework strategies." });
+      localStorage.setItem("book-logs-list", JSON.stringify(list)); renderBookList();
+    }
+
+    function createNewCareerLog() {
+      const list = localStorage.getItem("career-logs-list") ? JSON.parse(localStorage.getItem("career-logs-list")) : [...defaultCareerData];
+      list.unshift({ id: "cr-" + Date.now(), title: "NEW LOGISTICAL MILESTONE TARGET", body: "Click here to detail objective project parameters." });
+      localStorage.setItem("career-logs-list", JSON.stringify(list)); renderCareerList();
+    }
+
+    function createNewPipelineLog() {
+      const list = localStorage.getItem("pipeline-logs-list") ? JSON.parse(localStorage.getItem("pipeline-logs-list")) : [...defaultPipelineData];
+      list.unshift({ id: "pl-" + Date.now(), title: "NEW INFOLDER INITIATIVE CONCEPT" });
+      localStorage.setItem("pipeline-logs-list", JSON.stringify(list)); renderPipelineGrid();
+    }
+
+    function setEditableStates() {
+      if (document.body.classList.contains("admin-mode")) {
         document.querySelectorAll('.editable-field').forEach(el => el.contentEditable = "true");
-        toggleAdminPanel();
-        alert("🔒 Terminal Unlocked. Live Content Toggles & Photo Browsers Are Now Active.");
-      } else {
-        alert("Access Denied.");
       }
     }
 
+    function toggleAdminPanel() { document.getElementById('admin-modal').classList.toggle('hidden'); }
+
+    function verifyAdminAccess() {
+      if (document.getElementById('admin-pass-input').value === "akku2026") {
+        document.body.classList.add('admin-mode');
+        setEditableStates(); toggleAdminPanel();
+        alert("🔒 Terminal Unlocked. 'Add' buttons and image upload parameters active across all modules.");
+      } else { alert("Access Denied."); }
+    }
+
     function executeSaveAction() {
-      // Save fixed structure text elements
-      const coreFields = ["profile-name", "profile-tag", "intro-headline", "intro-body", "book-title", "book-body", "career-title", "career-body", "pipe-title-1", "pipe-title-2"];
-      coreFields.forEach(id => {
-        localStorage.setItem(id, document.getElementById(id).innerText);
+      const core = ["profile-name", "profile-tag", "intro-headline", "intro-body"];
+      core.forEach(id => localStorage.setItem(id, document.getElementById(id).innerText));
+
+      // Serialize dynamic module states back to persistent memory
+      const tData = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : [...defaultTimelineData];
+      tData.forEach(item => {
+        if(document.getElementById(`t-title-${item.id}`)) item.title = document.getElementById(`t-title-${item.id}`).innerText;
+        if(document.getElementById(`t-body-${item.id}`)) item.body = document.getElementById(`t-body-${item.id}`).innerText;
       });
+      localStorage.setItem("timeline-logs-list", JSON.stringify(tData));
 
-      // Scan and serialize compiled updates back out to timeline array states
-      const logs = localStorage.getItem("timeline-logs-list") 
-        ? JSON.parse(localStorage.getItem("timeline-logs-list"))
-        : [...defaultTimelineData];
-
-      logs.forEach(item => {
-        const titleEl = document.getElementById(`title-${item.id}`);
-        const bodyEl = document.getElementById(`body-${item.id}`);
-        if(titleEl) item.title = titleEl.innerText;
-        if(bodyEl) item.body = bodyEl.innerText;
+      const bData = localStorage.getItem("book-logs-list") ? JSON.parse(localStorage.getItem("book-logs-list")) : [...defaultBookData];
+      bData.forEach(item => {
+        if(document.getElementById(`b-title-${item.id}`)) item.title = document.getElementById(`b-title-${item.id}`).innerText;
+        if(document.getElementById(`b-body-${item.id}`)) item.body = document.getElementById(`b-body-${item.id}`).innerText;
       });
+      localStorage.setItem("book-logs-list", JSON.stringify(bData));
 
-      localStorage.setItem("timeline-logs-list", JSON.stringify(logs));
-      alert("💾 Changes completely synced to offline production cache.");
+      const cData = localStorage.getItem("career-logs-list") ? JSON.parse(localStorage.getItem("career-logs-list")) : [...defaultCareerData];
+      cData.forEach(item => {
+        if(document.getElementById(`c-title-${item.id}`)) item.title = document.getElementById(`c-title-${item.id}`).innerText;
+        if(document.getElementById(`c-body-${item.id}`)) item.body = document.getElementById(`c-body-${item.id}`).innerText;
+      });
+      localStorage.setItem("career-logs-list", JSON.stringify(cData));
+
+      const pData = localStorage.getItem("pipeline-logs-list") ? JSON.parse(localStorage.getItem("pipeline-logs-list")) : [...defaultPipelineData];
+      pData.forEach(item => {
+        if(document.getElementById(`p-title-${item.id}`)) item.title = document.getElementById(`p-title-${item.id}`).innerText;
+      });
+      localStorage.setItem("pipeline-logs-list", JSON.stringify(pData));
+
+      alert("💾 All structural modules compiled and cached successfully across devices.");
     }
 
     function switchTab(targetTabId) {
       document.querySelectorAll('.content-tab').forEach(tab => tab.classList.remove('active'));
       document.getElementById('tab-' + targetTabId).classList.add('active');
       document.querySelectorAll('.portfolio-nav-btn').forEach(btn => {
-        btn.classList.remove('text-stone-900', 'bg-stone-200/60');
-        btn.classList.add('text-stone-600');
+        btn.classList.remove('text-stone-900', 'bg-stone-200/60'); btn.classList.add('text-stone-600');
       });
-      const currentTargetBtn = document.getElementById('tab-btn-' + targetTabId);
-      if(currentTargetBtn) {
-        currentTargetBtn.classList.remove('text-stone-600');
-        currentTargetBtn.classList.add('text-stone-900', 'bg-stone-200/60');
-      }
+      const curr = document.getElementById('tab-btn-' + targetTabId);
+      if(curr) { curr.classList.remove('text-stone-600'); curr.classList.add('text-stone-900', 'bg-stone-200/60'); }
     }
   </script>
 </body>
