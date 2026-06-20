@@ -44,7 +44,7 @@
   <nav class="bg-[#FAFAF9]/90 backdrop-blur-md border-b border-stone-200 sticky top-0 z-50">
     <div class="max-w-5xl mx-auto px-6 flex justify-between items-center h-20">
       <div>
-        <button onclick="triggerTerminalLogin()" class="text-[10px] font-bold uppercase tracking-widest text-stone-400 hover:text-stone-900 transition-colors">🔒 Terminal Access</button>
+        <span class="text-xs font-black tracking-widest text-stone-400 uppercase">SYS // CONTROL</span>
       </div>
       
       <div class="flex flex-wrap items-center gap-1 justify-end py-2">
@@ -97,27 +97,15 @@
           <p id="intro-body" class="editable-field text-stone-600 font-medium leading-relaxed text-base sm:text-lg">This is the definitive portfolio of my personal blueprints, high-level career concepts, and active live blogs. From mechanical engineering principles to launching hyper-custom industrial spaces like Akku Hybrid Systems, I don't just draft concepts—I construct them flawlessly.</p>
           <p class="text-stone-700 font-bold leading-relaxed text-sm uppercase tracking-wide bg-stone-100 p-5 border border-stone-200 rounded-2xl">📢 Consider this your primary pipeline monitor. Bookmark this hub and visit often to keep tabs on current project status modules, lifecycle milestones, and deployment logs as they drop live.</p>
           
-          <div class="pt-2 flex flex-wrap gap-3 items-center">
-            <button onclick="switchTab('story')" class="bg-stone-900 text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:bg-stone-800 shadow-sm">
-              Read Live Timelines
-            </button>
-            <a href="https://akkucustomfurniture.vercel.app/" target="_blank" class="border border-stone-300 bg-white text-stone-900 font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:bg-stone-50 shadow-sm flex items-center gap-2">
-              Launch Akku Systems ↗
-            </a>
-            
-            <div class="flex flex-wrap items-center gap-3 relative z-30">
-              <a href="https://wachsen-hoch.vercel.app" id="dynamic-agency-anchor" target="_blank" class="border border-[#943A3A] bg-red-50/50 text-[#943A3A] font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:bg-red-50 shadow-sm flex items-center gap-2">
-                Launch <span id="dynamic-link-label">WACHSEN HOCH</span> ⚡
-              </a>
-              
-              <div id="admin-url-config-box" class="hidden items-center gap-2 border-2 border-dashed border-emerald-400 p-2 rounded-xl bg-white shadow-inner min-w-[340px]">
-                <span class="text-[9px] font-black text-emerald-600 uppercase tracking-wider pl-1">URL:</span>
-                <span id="dynamic-url-input-box" class="editable-field text-[11px] text-stone-700 font-mono font-bold px-2 py-1.5 bg-stone-50 rounded-lg flex-grow cursor-text focus:outline-none focus:bg-emerald-50" style="min-width: 200px; display: inline-block;">https://wachsen-hoch.vercel.app</span>
-                <button onclick="removeProfileLinkElement()" class="text-[9px] text-red-600 border border-red-200 bg-red-50 px-2 py-1.5 rounded-lg font-black uppercase hover:bg-red-100">Remove</button>
-              </div>
+          <div class="space-y-4 pt-2">
+            <div class="flex justify-between items-center">
+              <span class="text-[10px] font-black tracking-widest text-stone-400 uppercase">Deployed Links & Asset Channels</span>
+              <button onclick="createNewProfileLinkCard()" class="hidden admin-action-btn bg-stone-950 text-white font-extrabold text-[10px] uppercase tracking-wider px-4 py-2 rounded-xl hover:bg-stone-800 items-center gap-1.5 shadow">＋ Add Link Card</button>
             </div>
-
+            <div id="profile-links-container" class="flex flex-wrap gap-3 items-center">
+              </div>
           </div>
+
         </div>
       </div>
     </section>
@@ -180,6 +168,12 @@
     const defaultCareerData = [{ id: "c1", title: "PMP Certified Project Manager", body: "An adaptive strategy focused entirely on scope execution and absolute goal attainment." }];
     const defaultPipelineData = [{ id: "p1", title: "Custom Designed Automobiles" }, { id: "p2", title: "Environmental Waste Clearing NGO" }];
 
+    // Clean Default Profile External Asset Routes Payload Matrix
+    const defaultProfileLinks = [
+      { id: "lnk-1", label: "LAUNCH AKKU SYSTEMS", url: "https://akkucustomfurniture.vercel.app/" },
+      { id: "lnk-2", label: "LAUNCH WACHSEN HOCH", url: "https://wachsen-hoch.vercel.app" }
+    ];
+
     document.addEventListener("DOMContentLoaded", () => {
       if(localStorage.getItem("custom-profile-pic")) {
         document.getElementById("profile-display-img").src = localStorage.getItem("custom-profile-pic");
@@ -191,53 +185,57 @@
         if(localStorage.getItem(id)) document.getElementById(id).innerText = localStorage.getItem(id);
       });
 
-      // Synchronize visibility states on initialization
-      if(localStorage.getItem("profile-link-hidden-state") === "true") {
-        document.getElementById("dynamic-agency-anchor").classList.add("hidden");
-      }
-
-      let savedUrl = "https://wachsen-hoch.vercel.app";
-      if(localStorage.getItem("dynamic-venture-url")) {
-        savedUrl = localStorage.getItem("dynamic-venture-url").trim();
-      }
-      document.getElementById("dynamic-agency-anchor").href = savedUrl;
-      document.getElementById("dynamic-url-input-box").innerText = savedUrl;
-      updateDynamicLinkLabel(savedUrl);
-
       renderAllDynamicModules();
     });
 
-    function updateDynamicLinkLabel(url) {
-      try {
-        let cleanName = url.replace(/^(https?:\/\/)?(www\.)?/, '').split('.')[0];
-        cleanName = cleanName.replace(/[-_]/g, ' ');
-        document.getElementById("dynamic-link-label").innerText = cleanName.toUpperCase();
-      } catch(e) {
-        document.getElementById("dynamic-link-label").innerText = "LAUNCH VENTURE";
-      }
-    }
-
     function renderAllDynamicModules() {
+      renderProfileLinkStack();
       renderTimelineList();
       renderBookList();
       renderCareerList();
       renderPipelineGrid();
     }
 
-    function handleImageUpload(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const base64Img = e.target.result;
-          document.getElementById("profile-display-img").src = base64Img;
-          document.getElementById('img-placeholder-text').classList.add('hidden');
-          localStorage.setItem("custom-profile-pic", base64Img);
-        }
-        reader.readAsDataURL(file);
+    // ─── DYNAMIC PROFILE LINK ARCHITECTURE RENDER ENGINE ───
+    function renderProfileLinkStack() {
+      const container = document.getElementById("profile-links-container"); container.innerHTML = "";
+      const data = localStorage.getItem("profile-links-matrix-list") ? JSON.parse(localStorage.getItem("profile-links-matrix-list")) : defaultProfileLinks;
+      
+      data.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "flex items-center gap-2 bg-white border border-stone-200 p-2 rounded-2xl shadow-sm border-l-4 border-l-[#943A3A]";
+        div.innerHTML = `
+          <a href="${item.url}" id="l-anchor-${item.id}" target="_blank" class="text-stone-900 font-bold text-xs uppercase tracking-wider px-3 py-1.5 hover:text-[#943A3A] transition-all flex items-center gap-1.5">
+            <span id="l-text-${item.id}" class="editable-field">${item.label}</span> ↗
+          </a>
+          <div id="l-config-deck-${item.id}" class="hidden items-center gap-1.5 bg-stone-50 p-1 rounded-xl border border-dashed border-stone-300">
+            <span class="text-[9px] font-mono font-bold text-stone-400 pl-1">URL:</span>
+            <span id="l-url-${item.id}" class="editable-field text-[10px] font-mono font-bold text-stone-600 bg-white px-2 py-1 rounded-md cursor-text focus:outline-none" style="min-width:160px; display:inline-block;">${item.url}</span>
+            <button onclick="deleteProfileLinkCard('${item.id}')" class="text-[9px] text-red-600 font-black uppercase bg-red-50 border border-red-200 px-2 py-1 rounded-md hover:bg-red-100">Delete</button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+      setEditableStates();
+    }
+
+    function createNewProfileLinkCard() {
+      const list = localStorage.getItem("profile-links-matrix-list") ? JSON.parse(localStorage.getItem("profile-links-matrix-list")) : [...defaultProfileLinks];
+      list.push({ id: "lnk-" + Date.now(), label: "NEW BLUEPRINT LINK", url: "https://example.com" });
+      localStorage.setItem("profile-links-matrix-list", JSON.stringify(list));
+      renderProfileLinkStack();
+    }
+
+    function deleteProfileLinkCard(targetId) {
+      if(confirm("Permanently erase this asset routing link node from the grid?")) {
+        let list = localStorage.getItem("profile-links-matrix-list") ? JSON.parse(localStorage.getItem("profile-links-matrix-list")) : [...defaultProfileLinks];
+        list = list.filter(item => item.id !== targetId);
+        localStorage.setItem("profile-links-matrix-list", JSON.stringify(list));
+        renderProfileLinkStack();
       }
     }
 
+    // ─── DYNAMIC CORE LAYOUT CARD MODULES ───
     function renderTimelineList() {
       const container = document.getElementById("timeline-stack"); container.innerHTML = "";
       const data = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : defaultTimelineData;
@@ -304,7 +302,7 @@
     }
 
     function deleteModuleItem(storageKey, targetId) {
-      if(confirm("Are you sure you want to permanently erase this layout card parameter?")) {
+      if(confirm("Are you sure you want to permanently erase this parameter?")) {
         let activeDefaults = storageKey === 'timeline-logs-list' ? defaultTimelineData 
                            : storageKey === 'book-logs-list' ? defaultBookData 
                            : storageKey === 'career-logs-list' ? defaultCareerData 
@@ -316,83 +314,106 @@
       }
     }
 
-    // ─── PERSISTENT CONFIG DECK LINK ACTIONS ───
-    function removeProfileLinkElement() {
-      if(confirm("Completely wipe out and remove this link block from the public display profile?")) {
-        document.getElementById("dynamic-agency-anchor").classList.add("hidden");
-        document.getElementById("dynamic-url-input-box").innerText = "";
-        localStorage.setItem("profile-link-hidden-state", "true");
-        localStorage.setItem("dynamic-venture-url", "");
-        alert("Link removed. Enter any new URL in the green dashed configuration deck to recreate it.");
-      }
-    }
-
     function createNewVentureLog() {
       const list = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : [...defaultTimelineData];
-      list.unshift({ id: "tl-" + Date.now(), marker: `Venture Log #0${list.length + 1}`, title: "NEW DYNAMIC VENTURE CAPABILITY", body: "Click here to summarize project mechanics." });
+      list.unshift({ id: "tl-" + Date.now(), marker: `Venture Log #0${list.length + 1}`, title: "NEW DYNAMIC VENTURE", body: "Click here to summarize project mechanics." });
       localStorage.setItem("timeline-logs-list", JSON.stringify(list)); renderTimelineList();
     }
 
     function createNewBookLog() {
       const list = localStorage.getItem("book-logs-list") ? JSON.parse(localStorage.getItem("book-logs-list")) : [...defaultBookData];
-      list.unshift({ id: "bk-" + Date.now(), title: "[ NEW UNTITLED MANUSCRIPT ENTRY ]", body: "Click here to draft framework strategies." });
+      list.unshift({ id: "bk-" + Date.now(), title: "[ NEW MANUSCRIPT ]", body: "Click here to draft framework strategies." });
       localStorage.setItem("book-logs-list", JSON.stringify(list)); renderBookList();
     }
 
     function createNewCareerLog() {
       const list = localStorage.getItem("career-logs-list") ? JSON.parse(localStorage.getItem("career-logs-list")) : [...defaultCareerData];
-      list.unshift({ id: "cr-" + Date.now(), title: "NEW LOGISTICAL MILESTONE TARGET", body: "Click here to detail objective project parameters." });
+      list.unshift({ id: "cr-" + Date.now(), title: "NEW LOGISTICAL TARGET", body: "Click here to detail objective project parameters." });
       localStorage.setItem("career-logs-list", JSON.stringify(list)); renderCareerList();
     }
 
     function createNewPipelineLog() {
       const list = localStorage.getItem("pipeline-logs-list") ? JSON.parse(localStorage.getItem("pipeline-logs-list")) : [...defaultPipelineData];
-      list.unshift({ id: "pl-" + Date.now(), title: "NEW INFOLDER INITIATIVE CONCEPT" });
+      list.unshift({ id: "pl-" + Date.now(), title: "NEW PIPELINE CONCEPT" });
       localStorage.setItem("pipeline-logs-list", JSON.stringify(list)); renderPipelineGrid();
+    }
+
+    function handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const base64Img = e.target.result;
+          document.getElementById("profile-display-img").src = base64Img;
+          document.getElementById('img-placeholder-text').classList.add('hidden');
+          localStorage.setItem("custom-profile-pic", base64Img);
+        }
+        reader.readAsDataURL(file);
+      }
     }
 
     function setEditableStates() {
       if (document.body.classList.contains("admin-mode")) {
         document.querySelectorAll('.editable-field').forEach(el => el.contentEditable = "true");
-        document.getElementById("admin-url-config-box").style.display = "inline-flex";
+        const data = localStorage.getItem("profile-links-matrix-list") ? JSON.parse(localStorage.getItem("profile-links-matrix-list")) : defaultProfileLinks;
+        data.forEach(item => {
+          if(document.getElementById(`l-config-deck-${item.id}`)) {
+            document.getElementById(`l-config-deck-${item.id}`).style.display = "inline-flex";
+          }
+        });
       }
-    }
-
-    function triggerTerminalLogin() {
-      const accessPassword = prompt("Authorize Page Control - Enter System Password:");
-      if (accessPassword === "akku2026") { activateAdminLayout(); } 
-      else if (accessPassword !== null) { alert("Access Denied."); }
     }
 
     function executeInlineOverride() {
       if(document.getElementById("inline-pass-field").value === "akku2026") {
-        activateAdminLayout(); document.getElementById("inline-pass-field").value = "";
+        document.body.classList.add('admin-mode'); setEditableStates();
+        document.getElementById("inline-pass-field").value = "";
+        alert("🔒 Terminal Override Enabled. Multi-link deck operational.");
       } else { alert("Invalid Override Token."); }
-    }
-
-    function activateAdminLayout() {
-      document.body.classList.add('admin-mode'); setEditableStates();
-      alert("🔒 Terminal Unlocked. Add/Update Link deck operational.");
     }
 
     function executeSaveAction() {
       const core = ["profile-name", "profile-tag", "intro-headline", "intro-body"];
       core.forEach(id => localStorage.setItem(id, document.getElementById(id).innerText));
 
-      let rawInputUrl = document.getElementById("dynamic-url-input-box").innerText.trim();
-      if(rawInputUrl === "") {
-        localStorage.setItem("profile-link-hidden-state", "true");
-        localStorage.setItem("dynamic-venture-url", "");
-      } else {
-        localStorage.setItem("profile-link-hidden-state", "false");
-        localStorage.setItem("dynamic-venture-url", rawInputUrl);
-      }
+      // Serialize Multi-Link Grid Changes Securely
+      const lData = localStorage.getItem("profile-links-matrix-list") ? JSON.parse(localStorage.getItem("profile-links-matrix-list")) : [...defaultProfileLinks];
+      lData.forEach(item => {
+        if(document.getElementById(`l-text-${item.id}`)) item.label = document.getElementById(`l-text-${item.id}`).innerText.trim();
+        if(document.getElementById(`l-url-${item.id}`)) item.url = document.getElementById(`l-url-${item.id}`).innerText.trim();
+      });
+      localStorage.setItem("profile-links-matrix-list", JSON.stringify(lData));
 
-      document.getElementById("admin-url-config-box").style.display = "none";
+      // Serialize dynamic module text data
+      const tData = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : [...defaultTimelineData];
+      tData.forEach(item => {
+        if(document.getElementById(`t-title-${item.id}`)) item.title = document.getElementById(`t-title-${item.id}`).innerText;
+        if(document.getElementById(`t-body-${item.id}`)) item.body = document.getElementById(`t-body-${item.id}`).innerText;
+      });
+      localStorage.setItem("timeline-logs-list", JSON.stringify(tData));
+
+      const bData = localStorage.getItem("book-logs-list") ? JSON.parse(localStorage.getItem("book-logs-list")) : [...defaultBookData];
+      bData.forEach(item => {
+        if(document.getElementById(`b-title-${item.id}`)) item.title = document.getElementById(`b-title-${item.id}`).innerText;
+        if(document.getElementById(`b-body-${item.id}`)) item.body = document.getElementById(`b-body-${item.id}`).innerText;
+      });
+      localStorage.setItem("book-logs-list", JSON.stringify(bData));
+
+      const cData = localStorage.getItem("career-logs-list") ? JSON.parse(localStorage.getItem("career-logs-list")) : [...defaultCareerData];
+      cData.forEach(item => {
+        if(document.getElementById(`c-title-${item.id}`)) item.title = document.getElementById(`c-title-${item.id}`).innerText;
+        if(document.getElementById(`c-body-${item.id}`)) item.body = document.getElementById(`c-body-${item.id}`).innerText;
+      });
+      localStorage.setItem("career-logs-list", JSON.stringify(cData));
+
+      const pData = localStorage.getItem("pipeline-logs-list") ? JSON.parse(localStorage.getItem("pipeline-logs-list")) : [...defaultPipelineData];
+      pData.forEach(item => {
+        if(document.getElementById(`p-title-${item.id}`)) item.title = document.getElementById(`p-title-${item.id}`).innerText;
+      });
+      localStorage.setItem("pipeline-logs-list", JSON.stringify(pData));
+
       document.body.classList.remove('admin-mode');
-      document.querySelectorAll('.editable-field').forEach(el => el.contentEditable = "false");
-
-      alert("💾 Changes saved successfully.");
+      alert("💾 All changes saved successfully.");
       window.location.reload(); 
     }
 
