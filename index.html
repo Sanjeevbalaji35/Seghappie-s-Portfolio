@@ -36,6 +36,7 @@
     }
     .save-indicator { display: none; }
     body.admin-mode .save-indicator { display: block; }
+    body.admin-mode .admin-action-btn { display: inline-flex !important; }
   </style>
 </head>
 <body class="bg-[#FAFAF9] text-[#1C1917] min-h-screen flex flex-col justify-between selection:bg-stone-200">
@@ -81,8 +82,15 @@
         
         <div class="bg-white border border-stone-200 rounded-3xl p-6 flex flex-col justify-between shadow-sm md:col-span-1 min-h-[520px]">
           <div class="space-y-6 flex-grow flex flex-col justify-center">
-            <div class="w-full aspect-[4/5] bg-stone-50 rounded-2xl overflow-hidden border border-stone-200 shadow-inner flex items-center justify-center relative">
-              <img src="profile.png" alt="Sanjeev Balaji" class="w-full h-full object-cover" onerror="this.src='profile.jpeg'; this.onerror=function(){this.src='WhatsApp Image 2026-06-21 at 12.19.55 AM.jpeg'; this.onerror=function(){this.parentElement.innerHTML='<span class=\'text-stone-400 text-xs font-bold\'>Photo Frame Active</span>'}}}">
+            
+            <div class="w-full aspect-[4/5] bg-stone-50 rounded-2xl overflow-hidden border border-stone-200 shadow-inner flex flex-col items-center justify-center relative group">
+              <img id="profile-display-img" src="profile.png" alt="Sanjeev Balaji" class="w-full h-full object-cover" onerror="this.src='profile.jpeg'; this.onerror=function(){this.src='WhatsApp Image 2026-06-21 at 12.19.55 AM.jpeg'; this.onerror=function(){this.style.display='none'; document.getElementById('img-placeholder-text').classList.remove('hidden');}}}">
+              <div id="img-placeholder-text" class="hidden text-stone-400 text-xs font-bold uppercase tracking-wider">Photo Frame Active</div>
+              
+              <label class="hidden admin-action-btn absolute bottom-3 left-3 right-3 bg-stone-900/80 hover:bg-stone-900 text-white text-[10px] font-bold uppercase tracking-wider py-2 px-3 rounded-xl justify-center items-center gap-1 cursor-pointer transition-all backdrop-blur-sm shadow">
+                📸 Browse Offline Files
+                <input type="file" id="profile-file-picker" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
+              </label>
             </div>
             
             <div class="text-center space-y-2">
@@ -104,29 +112,18 @@
     </section>
 
     <section id="tab-story" class="content-tab max-w-3xl mx-auto py-4">
-      <div class="mb-12">
-        <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">The Journey Archive</h2>
-        <p class="text-xs text-stone-500 font-bold uppercase tracking-wider mt-1">Real-time lifecycle updates, structural realizations, and venture deployments</p>
+      <div class="mb-12 flex justify-between items-center flex-wrap gap-4">
+        <div>
+          <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">The Journey Archive</h2>
+          <p class="text-xs text-stone-500 font-bold uppercase tracking-wider mt-1">Real-time lifecycle updates, structural realizations, and venture deployments</p>
+        </div>
+        <button onclick="createNewVentureLog()" class="hidden admin-action-btn bg-stone-900 text-white font-extrabold text-[10px] uppercase tracking-wider px-4 py-2.5 rounded-xl hover:bg-stone-800 items-center gap-1.5 shadow">
+          ＋ Add Venture Log
+        </button>
       </div>
 
-      <div class="relative border-l border-stone-200 ml-4 pl-8 space-y-12">
-        <div class="relative">
-          <div class="absolute -left-[41px] top-1 bg-stone-900 border-4 border-[#FAFAF9] rounded-full w-5 h-5"></div>
-          <span class="text-[10px] font-extrabold text-[#943A3A] uppercase tracking-widest bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-md inline-block mb-3">Venture Log #02</span>
-          <div class="bg-white border border-stone-200 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4">
-            <h3 id="story-title-2" class="editable-field text-xl font-black text-stone-900 uppercase tracking-wide">Wachsen Hoch: Engineering the Visibility Matrix</h3>
-            <p id="story-body-2" class="editable-field text-stone-600 text-sm leading-relaxed font-medium">After launching the Akku Custom Furniture ecosystem, I scaling the skill set natively. This gave birth to Wachsen Hoch, a digital growth and performance marketing organization designed to scale absolute market reach.</p>
-          </div>
+      <div id="timeline-stack" class="relative border-l border-stone-200 ml-4 pl-8 space-y-12">
         </div>
-        <div class="relative">
-          <div class="absolute -left-[41px] top-1 bg-stone-400 border-4 border-[#FAFAF9] rounded-full w-5 h-5"></div>
-          <span class="text-[10px] font-extrabold text-stone-400 uppercase tracking-widest bg-stone-100 border px-2.5 py-0.5 rounded-md inline-block mb-3">Venture Log #01</span>
-          <div class="bg-white border border-stone-200 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4">
-            <h3 id="story-title-1" class="editable-field text-xl font-black text-stone-800 uppercase tracking-wide">The Sleepless Night: How a Console Table Sparked a Design System</h3>
-            <p id="story-body-1" class="editable-field text-stone-600 text-sm leading-relaxed font-medium">It started on a completely fine day that bled into a restless, sleepless night. That night, I decided to engineer a direct, practical customization pipeline for furniture fabrication.</p>
-          </div>
-        </div>
-      </div>
     </section>
 
     <section id="tab-books" class="content-tab max-w-3xl mx-auto py-4">
@@ -163,15 +160,88 @@
   </footer>
 
   <script>
-    // Initialize Local Storage Caching Framework fallback to allow saving without full database setups
+    // System Baseline Array Structure for Defaults
+    const defaultTimelineData = [
+      { id: "log-2", marker: "Venture Log #02", title: "Wachsen Hoch: Engineering the Visibility Matrix", body: "After launching the Akku Custom Furniture ecosystem, I scaled the skill set natively. This gave birth to Wachsen Hoch, a digital growth organization designed to scale absolute market reach." },
+      { id: "log-1", marker: "Venture Log #01", title: "The Sleepless Night: How a Console Table Sparked a Design System", body: "It started on a completely fine day that bled into a restless, sleepless night. That night, I decided to engineer a direct, practical customization pipeline for furniture fabrication." }
+    ];
+
     document.addEventListener("DOMContentLoaded", () => {
-      const savedFields = ["profile-name", "profile-tag", "intro-headline", "intro-body", "story-title-2", "story-body-2", "story-title-1", "story-body-1", "book-title", "book-body", "career-title", "career-body", "pipe-title-1", "pipe-title-2"];
-      savedFields.forEach(id => {
-        if(localStorage.getItem(id)) {
-          document.getElementById(id).innerText = localStorage.getItem(id);
-        }
+      // Load image data if saved
+      if(localStorage.getItem("custom-profile-pic")) {
+        document.getElementById("profile-display-img").src = localStorage.getItem("custom-profile-pic");
+        document.getElementById("img-placeholder-text").classList.add('hidden');
+      }
+
+      // Load standard profile/text modifications
+      const fields = ["profile-name", "profile-tag", "intro-headline", "intro-body", "book-title", "book-body", "career-title", "career-body", "pipe-title-1", "pipe-title-2"];
+      fields.forEach(id => {
+        if(localStorage.getItem(id)) document.getElementById(id).innerText = localStorage.getItem(id);
       });
+
+      // Render Timeline logs safely from local payload data arrays
+      renderTimelineList();
     });
+
+    function renderTimelineList() {
+      const container = document.getElementById("timeline-stack");
+      container.innerHTML = "";
+      
+      const logs = localStorage.getItem("timeline-logs-list") 
+        ? JSON.parse(localStorage.getItem("timeline-logs-list"))
+        : defaultTimelineData;
+
+      logs.forEach(item => {
+        const block = document.createElement("div");
+        block.className = "relative";
+        block.innerHTML = `
+          <div class="absolute -left-[41px] top-1 bg-stone-900 border-4 border-[#FAFAF9] rounded-full w-5 h-5"></div>
+          <span class="text-[10px] font-extrabold text-[#943A3A] uppercase tracking-widest bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-md inline-block mb-3">${item.marker}</span>
+          <div class="bg-white border border-stone-200 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4">
+            <h3 id="title-${item.id}" class="editable-field text-xl font-black text-stone-900 uppercase tracking-wide">${item.title}</h3>
+            <p id="body-${item.id}" class="editable-field text-stone-600 text-sm leading-relaxed font-medium">${item.body}</p>
+          </div>
+        `;
+        container.appendChild(block);
+      });
+
+      if (document.body.classList.contains("admin-mode")) {
+        document.querySelectorAll('#timeline-stack .editable-field').forEach(el => el.contentEditable = "true");
+      }
+    }
+
+    function handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const base64Img = e.target.result;
+          document.getElementById("profile-display-img").src = base64Img;
+          document.getElementById("img-placeholder-text").classList.add('hidden');
+          localStorage.setItem("custom-profile-pic", base64Img);
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function createNewVentureLog() {
+      const currentLogs = localStorage.getItem("timeline-logs-list") 
+        ? JSON.parse(localStorage.getItem("timeline-logs-list"))
+        : [...defaultTimelineData];
+
+      const newId = "custom-" + Date.now();
+      const count = currentLogs.length + 1;
+      
+      currentLogs.unshift({
+        id: newId,
+        marker: `Venture Log #0${count}`,
+        title: "NEW UNTITLED VENTURE STRUCTURE",
+        body: "Click inside this text space to draft your project parameters on-screen."
+      });
+
+      localStorage.setItem("timeline-logs-list", JSON.stringify(currentLogs));
+      renderTimelineList();
+    }
 
     function toggleAdminPanel() {
       document.getElementById('admin-modal').classList.toggle('hidden');
@@ -181,28 +251,35 @@
       const input = document.getElementById('admin-pass-input').value;
       if (input === "akku2026") {
         document.body.classList.add('admin-mode');
-        
-        // Dynamic loop to instantly make EVERY single element editable across all tabs!
-        document.querySelectorAll('.editable-field').forEach(element => {
-          element.contentEditable = "true";
-        });
-        
+        document.querySelectorAll('.editable-field').forEach(el => el.contentEditable = "true");
         toggleAdminPanel();
-        alert("🔒 Admin System Active. Move between tabs and click directly on any text block with a dashed green line to customize it on your monitor.");
+        alert("🔒 Terminal Unlocked. Live Content Toggles & Photo Browsers Are Now Active.");
       } else {
         alert("Access Denied.");
       }
     }
 
     function executeSaveAction() {
-      const fields = ["profile-name", "profile-tag", "intro-headline", "intro-body", "story-title-2", "story-body-2", "story-title-1", "story-body-1", "book-title", "book-body", "career-title", "career-body", "pipe-title-1", "pipe-title-2"];
-      
-      fields.forEach(id => {
-        const text = document.getElementById(id).innerText;
-        localStorage.setItem(id, text);
+      // Save fixed structure text elements
+      const coreFields = ["profile-name", "profile-tag", "intro-headline", "intro-body", "book-title", "book-body", "career-title", "career-body", "pipe-title-1", "pipe-title-2"];
+      coreFields.forEach(id => {
+        localStorage.setItem(id, document.getElementById(id).innerText);
       });
-      
-      alert("💾 Changes compiled and cached successfully.");
+
+      // Scan and serialize compiled updates back out to timeline array states
+      const logs = localStorage.getItem("timeline-logs-list") 
+        ? JSON.parse(localStorage.getItem("timeline-logs-list"))
+        : [...defaultTimelineData];
+
+      logs.forEach(item => {
+        const titleEl = document.getElementById(`title-${item.id}`);
+        const bodyEl = document.getElementById(`body-${item.id}`);
+        if(titleEl) item.title = titleEl.innerText;
+        if(bodyEl) item.body = bodyEl.innerText;
+      });
+
+      localStorage.setItem("timeline-logs-list", JSON.stringify(logs));
+      alert("💾 Changes completely synced to offline production cache.");
     }
 
     function switchTab(targetTabId) {
