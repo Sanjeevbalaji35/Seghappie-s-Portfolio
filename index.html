@@ -1,84 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sanjeev Balaji | Ideas, Works & Venture Space</title>
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            stoneCharcoal: '#1C1917',
-            stoneAlabaster: '#FAFAF9',
-          }
-        }
-      }
-    }
-  </script>
-
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-    body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    .content-tab { display: none; }
-    .content-tab.active { display: block; }
-  </style>
-</head>
-<body class="bg-[#FAFAF9] text-[#1C1917] min-h-screen flex flex-col justify-between selection:bg-stone-200">
-
-  <nav class="bg-[#FAFAF9]/90 backdrop-blur-md border-b border-stone-200 sticky top-0 z-50">
-    <div class="max-w-5xl mx-auto px-6">
-      <div class="flex justify-between items-center h-20">
-        <div></div>
-        
-        <div class="flex items-center gap-1">
-          <button onclick="switchTab('bio')" id="tab-btn-bio" class="portfolio-nav-btn px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider text-stone-900 bg-stone-200/60">Profile</button>
-          <button onclick="switchTab('story')" id="tab-btn-story" class="portfolio-nav-btn px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider text-stone-600 hover:bg-stone-100">Live Story</button>
-          <button onclick="switchTab('books')" id="tab-btn-books" class="portfolio-nav-btn px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider text-stone-600 hover:bg-stone-100">Book Room</button>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <main class="flex-grow max-w-5xl mx-auto w-full px-6 py-12">
-    
-    <section id="tab-bio" class="content-tab active space-y-16 animate-in fade-in duration-300">
-      <div class="grid md:grid-cols-3 gap-12 items-center">
-        
-        <div class="bg-white border border-stone-200 rounded-3xl p-8 space-y-4 text-center shadow-sm md:col-span-1">
-          <div class="w-24 h-24 bg-stone-900 text-white rounded-full mx-auto flex items-center justify-center text-2xl font-black tracking-widest shadow-inner">SB</div>
-          <div>
-            <h3 class="font-black text-stone-900 uppercase tracking-wide text-lg">Sanjeev Balaji</h3>
-          </div>
-        </div>
-
-        <div class="md:col-span-2 space-y-6">
-          <span class="text-xs font-bold uppercase tracking-widest text-stone-500 bg-stone-100 border border-stone-200 px-3 py-1 rounded-full inline-block">The Master Dashboard</span>
-          <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-stone-900 uppercase leading-tight">
-            Ideas. Works. <br/>Career. Blogs.
-          </h1>
-          <p class="text-stone-600 font-medium leading-relaxed text-base sm:text-lg">
-            This is the definitive portfolio of my personal blueprints, high-level career concepts, and active live blogs. From mechanical engineering principles to launching hyper-custom industrial spaces like Akku Hybrid Systems, I don't just draft concepts—I construct them flawlessly. 
-          </p>
-          <p class="text-stone-700 font-bold leading-relaxed text-sm uppercase tracking-wide bg-stone-100 p-4 border border-stone-200 rounded-2xl">
-            📢 Consider this your primary pipeline monitor. Bookmark this hub and visit often to keep tabs on current project status modules, lifecycle milestones, and deployment logs as they drop live.
-          </p>
-          <div class="pt-2 flex flex-wrap gap-3">
-            <button onclick="switchTab('story')" class="bg-stone-900 text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:bg-stone-800 shadow-sm">
-              Read Live Timelines
-            </button>
-            <a href="https://akkucustomfurniture.vercel.app/" target="_blank" class="border border-stone-300 bg-white text-stone-900 font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:bg-stone-50 shadow-sm flex items-center gap-2">
-              Launch Akku Systems ↗
-            </a>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <section id="tab-story" class="content-tab max-w-3xl mx-auto py-4">
+<section id="tab-story" class="content-tab max-w-3xl mx-auto py-4">
       <div class="mb-12">
         <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">The Journey Archive</h2>
         <p class="text-xs text-stone-500 font-bold uppercase tracking-wider mt-1">Real-time lifecycle updates, structural realizations, and venture deployments</p>
@@ -88,70 +8,53 @@
         
         <div class="relative">
           <div class="absolute -left-[41px] top-1 bg-stone-900 border-4 border-[#FAFAF9] rounded-full w-5 h-5"></div>
-          <span class="text-[10px] font-extrabold text-stone-400 uppercase tracking-widest bg-stone-100 border px-2.5 py-0.5 rounded-md inline-block mb-3">Venture Log #01</span>
+          <span class="text-[10px] font-extrabold text-[#943A3A] uppercase tracking-widest bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-md inline-block mb-3">Venture Log #02</span>
           
           <div class="bg-white border border-stone-200 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4">
-            <h3 class="text-xl font-black text-stone-900 uppercase tracking-wide">The Sleepless Night: How a Console Table Sparked a Design System</h3>
+            <div class="flex justify-between items-start flex-wrap gap-2">
+              <h3 class="text-xl font-black text-stone-900 uppercase tracking-wide">Wachsen Hoch: Engineering the Visibility Matrix</h3>
+              <span class="text-[10px] font-bold uppercase tracking-wider bg-stone-900 text-white px-2 py-1 rounded-md">Active Operation</span>
+            </div>
+            <p class="text-stone-600 text-sm leading-relaxed font-medium">
+              After launching the Akku Custom Furniture ecosystem, I collided immediately with the ultimate reality of any modern venture: **uncompromising execution requires high-velocity visibility.** Instead of outsourcing traffic management and data infrastructure to external corporate marketing teams, I took the ultimate builder path—I scaled the skill set natively.
+            </p>
+            <p class="text-stone-600 text-sm leading-relaxed font-medium">
+              This gave birth to <strong class="text-stone-900">Wachsen Hoch</strong>, a digital growth and performance marketing organization designed to scale absolute market reach. Whether promoting an industrial design system, a serialized book project, an independent movie, or a raw business blueprint, Wachsen Hoch deploys full-stack visibility architectures:
+            </p>
+            <ul class="space-y-2 pl-4 text-stone-600 text-xs font-semibold uppercase tracking-wide">
+              <li class="flex items-center gap-2"><span class="text-[#943A3A]">⚡</span> Social Media Marketing Matrix & Audience Funnels</li>
+              <li class="flex items-center gap-2"><span class="text-[#943A3A]">⚡</span> Hardened Search Engine Optimization (SEO) & Technical Discovery</li>
+              <li class="flex items-center gap-2"><span class="text-[#943A3A]">⚡</span> Strategic Launch Engineering for Products, Ideas, & Intellectual Properties</li>
+            </ul>
+            <p class="text-stone-600 text-sm leading-relaxed font-medium">
+              By controlling both the physical fabrication model (Akku) and the promotional visibility engine (Wachsen Hoch), I have completely unified the loop between product architecture and consumer traction. 
+            </p>
+            <div class="flex flex-wrap gap-1 pt-2">
+              <span class="bg-stone-50 border border-stone-200 text-[10px] font-bold text-stone-500 px-2 py-0.5 rounded uppercase">Wachsen Hoch</span>
+              <span class="bg-stone-50 border border-stone-200 text-[10px] font-bold text-stone-500 px-2 py-0.5 rounded uppercase">Growth Engineering</span>
+              <span class="bg-stone-50 border border-stone-200 text-[10px] font-bold text-stone-500 px-2 py-0.5 rounded uppercase">SEO Strategy</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative">
+          <div class="absolute -left-[41px] top-1 bg-stone-400 border-4 border-[#FAFAF9] rounded-full w-5 h-5"></div>
+          <span class="text-[10px] font-extrabold text-stone-400 uppercase tracking-widest bg-stone-100 border px-2.5 py-0.5 rounded-md inline-block mb-3">Venture Log #01</span>
+          
+          <div class="bg-white border border-stone-200 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4 opacity-80">
+            <h3 class="text-xl font-black text-stone-800 uppercase tracking-wide">The Sleepless Night: How a Console Table Sparked a Design System</h3>
             <p class="text-stone-600 text-sm leading-relaxed font-medium">
               It started on a completely fine day that bled into a restless, sleepless night. Earlier, I had ordered a console table through Amazon. When it arrived, it was a very simple design. It was worth the money for what it was, but it wasn't great. It lacked structural presence, and it cost significantly too much for a mass-produced item.
             </p>
-            <blockquote class="border-l-4 border-stone-800 pl-4 text-stone-500 text-xs italic font-medium py-1">
+            <blockquote class="border-l-4 border-stone-400 pl-4 text-stone-500 text-xs italic font-medium py-1">
               "Why can't I just design this on my own? If I can map out custom parameters, and have someone manufacture it directly, we can avoid mass production overhead and design explicitly for one person at a time."
             </blockquote>
-            <p class="text-stone-600 text-sm leading-relaxed font-medium">
-              That single sleepless night is exactly why I built the Akku custom manufacturing interface. The concept is built on pure practicality—draft your vision using a touchscreen drawing sketchpad, add custom hardware specification scripts, and route the blueprint directly to the fabrication workshop queue. A simple, robust solution engineered entirely over a late-night thought.
-            </p>
             <div class="flex flex-wrap gap-1 pt-2">
-              <span class="bg-stone-50 border border-stone-200 text-[10px] font-bold text-stone-500 px-2 py-0.5 rounded uppercase">Akku Origins</span>
-              <span class="bg-stone-50 border border-stone-200 text-[10px] font-bold text-stone-500 px-2 py-0.5 rounded uppercase">Custom Fabrication</span>
+              <span class="bg-stone-50 border border-stone-200 text-[10px] font-bold text-stone-400 px-2 py-0.5 rounded uppercase">Akku Origins</span>
+              <span class="bg-stone-50 border border-stone-200 text-[10px] font-bold text-stone-400 px-2 py-0.5 rounded uppercase">Custom Fabrication</span>
             </div>
           </div>
         </div>
 
       </div>
     </section>
-
-    <section id="tab-books" class="content-tab max-w-3xl mx-auto py-4">
-      <div class="mb-12">
-        <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Manuscripts & Creative Drafts</h2>
-        <p class="text-xs text-stone-500 font-bold uppercase tracking-wider mt-1">Archiving conceptual book projects, structural writing processes, and narrative themes</p>
-      </div>
-
-      <div class="bg-white border border-stone-200 rounded-2xl p-8 text-center space-y-4 shadow-sm">
-        <div class="text-stone-400 text-3xl">✍️</div>
-        <h3 class="font-bold text-stone-900 uppercase tracking-wide">Writing Room Matrix Setting Up</h3>
-        <p class="text-stone-600 text-sm font-medium max-w-md mx-auto leading-relaxed">
-          This dedicated terminal tab is optimized to host serialized book draft logs, chapter summaries, and world-building layouts as they evolve. 
-        </p>
-        <div class="w-12 h-[1px] bg-stone-300 mx-auto my-2"></div>
-        <p class="text-xs text-stone-400 font-semibold">Ready to map out themes. Give me a book concept, and we will frame chapter logs here instantly.</p>
-      </div>
-    </section>
-
-  </main>
-
-  <footer class="bg-stone-100 text-stone-600 py-10 text-center border-t border-stone-200">
-    <div class="max-w-5xl mx-auto px-6 flex flex-col items-center gap-3">
-      <span class="font-black tracking-tight text-stone-900 uppercase text-sm">Sanjeev Balaji Portfolio</span>
-      <p class="text-xs text-stone-500 font-medium">© 2026 Selvaraj Sanjeev Balaji. Built cleanly for static performance platforms.</p>
-    </div>
-  </footer>
-
-  <script>
-    function switchTab(targetTabId) {
-      document.querySelectorAll('.content-tab').forEach(tab => tab.classList.remove('active'));
-      document.getElementById('tab-' + targetTabId).classList.add('active');
-
-      document.querySelectorAll('.portfolio-nav-btn').forEach(btn => {
-        btn.classList.remove('text-stone-900', 'bg-stone-200/60');
-        btn.classList.add('text-stone-600');
-      });
-      const currentTargetBtn = document.getElementById('tab-btn-' + targetTabId);
-      if(currentTargetBtn) {
-        currentTargetBtn.classList.remove('text-stone-600');
-        currentTargetBtn.classList.add('text-stone-900', 'bg-stone-200/60');
-      }
-    }
-  </script>
-</body>
-</html>
