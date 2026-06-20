@@ -84,7 +84,7 @@
           <div class="space-y-6 flex-grow flex flex-col justify-center">
             
             <div class="w-full aspect-[4/5] bg-stone-50 rounded-2xl overflow-hidden border border-stone-200 shadow-inner flex flex-col items-center justify-center relative group">
-              <img id="profile-display-img" src="profile.png" alt="Sanjeev Balaji" class="w-full h-full object-cover" onerror="this.src='profile.jpeg'; this.onerror=function(){this.src='WhatsApp Image 2026-06-21 at 12.19.55 AM.jpeg'; this.onerror=function(){this.style.display='none'; document.getElementById('img-placeholder-text').classList.remove('hidden');}}}">
+              <img id="profile-display-img" src="profile.jpeg.jpeg" alt="Sanjeev Balaji" class="w-full h-full object-cover" onerror="this.src='profile.jpeg'; this.onerror=function(){this.src='profile.png'; this.onerror=function(){if(localStorage.getItem('custom-profile-pic')){this.src=localStorage.getItem('custom-profile-pic');}else{this.style.display='none'; document.getElementById('img-placeholder-text').classList.remove('hidden');}}}}">
               <div id="img-placeholder-text" class="hidden text-stone-400 text-xs font-bold uppercase tracking-wider">Photo Frame Active</div>
               
               <label class="hidden admin-action-btn absolute bottom-3 left-3 right-3 bg-stone-900/80 hover:bg-stone-900 text-white text-[10px] font-bold uppercase tracking-wider py-2 px-3 rounded-xl justify-center items-center gap-1 cursor-pointer transition-all backdrop-blur-sm shadow">
@@ -108,16 +108,20 @@
           <p id="intro-body" class="editable-field text-stone-600 font-medium leading-relaxed text-base sm:text-lg">This is the definitive portfolio of my personal blueprints, high-level career concepts, and active live blogs. From mechanical engineering principles to launching hyper-custom industrial spaces like Akku Hybrid Systems, I don't just draft concepts—I construct them flawlessly.</p>
           <p class="text-stone-700 font-bold leading-relaxed text-sm uppercase tracking-wide bg-stone-100 p-5 border border-stone-200 rounded-2xl">📢 Consider this your primary pipeline monitor. Bookmark this hub and visit often to keep tabs on current project status modules, lifecycle milestones, and deployment logs as they drop live.</p>
           
-          <div class="pt-2 flex flex-wrap gap-3">
+          <div class="pt-2 flex flex-wrap gap-3 items-center">
             <button onclick="switchTab('story')" class="bg-stone-900 text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:bg-stone-800 shadow-sm">
               Read Live Timelines
             </button>
             <a href="https://akkucustomfurniture.vercel.app/" target="_blank" class="border border-stone-300 bg-white text-stone-900 font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:bg-stone-50 shadow-sm flex items-center gap-2">
               Launch Akku Systems ↗
             </a>
-            <a href="/agency.html" id="wachsen-hoch-link" class="border border-[#943A3A] bg-red-50/50 text-[#943A3A] font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:bg-red-50 shadow-sm flex items-center gap-2">
-              Launch Wachsen Hoch ⚡
-            </a>
+            
+            <div class="flex items-center gap-2">
+              <a href="https://wachsen-hoch-delta.vercel.app" id="dynamic-agency-anchor" target="_blank" class="border border-[#943A3A] bg-red-50/50 text-[#943A3A] font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:bg-red-50 shadow-sm flex items-center gap-2">
+                Launch <span id="dynamic-link-label">Wachsen Hoch</span> ⚡
+              </a>
+              <span id="dynamic-url-input-box" class="editable-field hidden text-[10px] text-stone-400 font-mono font-bold border border-dashed border-stone-300 px-2 py-3 rounded-xl bg-stone-50">https://wachsen-hoch-delta.vercel.app</span>
+            </div>
           </div>
         </div>
       </div>
@@ -189,7 +193,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       if(localStorage.getItem("custom-profile-pic")) {
         document.getElementById("profile-display-img").src = localStorage.getItem("custom-profile-pic");
-        document.getElementById("img-placeholder-text").classList.add('hidden');
+        document.getElementById('img-placeholder-text').classList.add('hidden');
       }
 
       const fields = ["profile-name", "profile-tag", "intro-headline", "intro-body"];
@@ -197,8 +201,26 @@
         if(localStorage.getItem(id)) document.getElementById(id).innerText = localStorage.getItem(id);
       });
 
+      // Synchronize Target URLs
+      if(localStorage.getItem("dynamic-venture-url")) {
+        const customUrl = localStorage.getItem("dynamic-venture-url");
+        document.getElementById("dynamic-agency-anchor").href = customUrl;
+        document.getElementById("dynamic-url-input-box").innerText = customUrl;
+        updateDynamicLinkLabel(customUrl);
+      }
+
       renderAllDynamicModules();
     });
+
+    function updateDynamicLinkLabel(url) {
+      try {
+        let cleanName = url.replace(/^(https?:\/\/)?(www\.)?/, '').split('.')[0];
+        cleanName = cleanName.replace(/[-_]/g, ' ');
+        document.getElementById("dynamic-link-label").innerText = cleanName.toUpperCase();
+      } catch(e) {
+        document.getElementById("dynamic-link-label").innerText = "LAUNCH VENTURE";
+      }
+    }
 
     function renderAllDynamicModules() {
       renderTimelineList();
@@ -214,14 +236,14 @@
         reader.onload = function(e) {
           const base64Img = e.target.result;
           document.getElementById("profile-display-img").src = base64Img;
-          document.getElementById("img-placeholder-text").classList.add('hidden');
+          document.getElementById('img-placeholder-text').classList.add('hidden');
           localStorage.setItem("custom-profile-pic", base64Img);
         }
         reader.readAsDataURL(file);
       }
     }
 
-    // ─── RENDERING ACTIONS W/ INJECTED DELETE TERMINALS ───
+    // ─── RENDERING ACTIONS ───
     function renderTimelineList() {
       const container = document.getElementById("timeline-stack"); container.innerHTML = "";
       const data = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : defaultTimelineData;
@@ -280,111 +302,4 @@
       data.forEach(item => {
         const div = document.createElement("div"); div.className = "bg-white border border-stone-200 p-6 rounded-2xl shadow-sm flex justify-between items-center gap-4";
         div.innerHTML = `
-          <h4 id="p-title-${item.id}" class="editable-field font-black uppercase text-stone-900 flex-grow">${item.title}</h4>
-          <button onclick="deleteModuleItem('pipeline-logs-list', '${item.id}')" class="hidden admin-action-btn text-[10px] text-red-600 border border-red-200 bg-red-50 px-2 py-0.5 rounded-md font-bold uppercase hover:bg-red-100 whitespace-nowrap">🗑️ Delete</button>`;
-        container.appendChild(div);
-      });
-      setEditableStates();
-    }
-
-    // ─── SYSTEM ENGINE RESTRUCTURING ACTIONS ───
-    function deleteModuleItem(storageKey, targetId) {
-      if(confirm("Are you sure you want to permanently erase this layout card parameter?")) {
-        let activeDefaults = storageKey === 'timeline-logs-list' ? defaultTimelineData 
-                           : storageKey === 'book-logs-list' ? defaultBookData 
-                           : storageKey === 'career-logs-list' ? defaultCareerData 
-                           : defaultPipelineData;
-                           
-        let list = localStorage.getItem(storageKey) ? JSON.parse(localStorage.getItem(storageKey)) : [...activeDefaults];
-        list = list.filter(item => item.id !== targetId);
-        localStorage.setItem(storageKey, JSON.stringify(list));
-        renderAllDynamicModules();
-      }
-    }
-
-    function createNewVentureLog() {
-      const list = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : [...defaultTimelineData];
-      list.unshift({ id: "tl-" + Date.now(), marker: `Venture Log #0${list.length + 1}`, title: "NEW DYNAMIC VENTURE CAPABILITY", body: "Click here to summarize project mechanics." });
-      localStorage.setItem("timeline-logs-list", JSON.stringify(list)); renderTimelineList();
-    }
-
-    function createNewBookLog() {
-      const list = localStorage.getItem("book-logs-list") ? JSON.parse(localStorage.getItem("book-logs-list")) : [...defaultBookData];
-      list.unshift({ id: "bk-" + Date.now(), title: "[ NEW UNTITLED MANUSCRIPT ENTRY ]", body: "Click here to draft framework strategies." });
-      localStorage.setItem("book-logs-list", JSON.stringify(list)); renderBookList();
-    }
-
-    function createNewCareerLog() {
-      const list = localStorage.getItem("career-logs-list") ? JSON.parse(localStorage.getItem("career-logs-list")) : [...defaultCareerData];
-      list.unshift({ id: "cr-" + Date.now(), title: "NEW LOGISTICAL MILESTONE TARGET", body: "Click here to detail objective project parameters." });
-      localStorage.setItem("career-logs-list", JSON.stringify(list)); renderCareerList();
-    }
-
-    function createNewPipelineLog() {
-      const list = localStorage.getItem("pipeline-logs-list") ? JSON.parse(localStorage.getItem("pipeline-logs-list")) : [...defaultPipelineData];
-      list.unshift({ id: "pl-" + Date.now(), title: "NEW INFOLDER INITIATIVE CONCEPT" });
-      localStorage.setItem("pipeline-logs-list", JSON.stringify(list)); renderPipelineGrid();
-    }
-
-    function setEditableStates() {
-      if (document.body.classList.contains("admin-mode")) {
-        document.querySelectorAll('.editable-field').forEach(el => el.contentEditable = "true");
-      }
-    }
-
-    function toggleAdminPanel() { document.getElementById('admin-modal').classList.toggle('hidden'); }
-
-    function verifyAdminAccess() {
-      if (document.getElementById('admin-pass-input').value === "akku2026") {
-        document.body.classList.add('admin-mode');
-        setEditableStates(); toggleAdminPanel();
-        alert("🔒 Terminal Unlocked. Add/Delete management systems ready across all layers.");
-      } else { alert("Access Denied."); }
-    }
-
-    function executeSaveAction() {
-      const core = ["profile-name", "profile-tag", "intro-headline", "intro-body"];
-      core.forEach(id => localStorage.setItem(id, document.getElementById(id).innerText));
-
-      const tData = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : [...defaultTimelineData];
-      tData.forEach(item => {
-        if(document.getElementById(`t-title-${item.id}`)) item.title = document.getElementById(`t-title-${item.id}`).innerText;
-        if(document.getElementById(`t-body-${item.id}`)) item.body = document.getElementById(`t-body-${item.id}`).innerText;
-      });
-      localStorage.setItem("timeline-logs-list", JSON.stringify(tData));
-
-      const bData = localStorage.getItem("book-logs-list") ? JSON.parse(localStorage.getItem("book-logs-list")) : [...defaultBookData];
-      bData.forEach(item => {
-        if(document.getElementById(`b-title-${item.id}`)) item.title = document.getElementById(`b-title-${item.id}`).innerText;
-        if(document.getElementById(`b-body-${item.id}`)) item.body = document.getElementById(`b-body-${item.id}`).innerText;
-      });
-      localStorage.setItem("book-logs-list", JSON.stringify(bData));
-
-      const cData = localStorage.getItem("career-logs-list") ? JSON.parse(localStorage.getItem("career-logs-list")) : [...defaultCareerData];
-      cData.forEach(item => {
-        if(document.getElementById(`c-title-${item.id}`)) item.title = document.getElementById(`c-title-${item.id}`).innerText;
-        if(document.getElementById(`c-body-${item.id}`)) item.body = document.getElementById(`c-body-${item.id}`).innerText;
-      });
-      localStorage.setItem("career-logs-list", JSON.stringify(cData));
-
-      const pData = localStorage.getItem("pipeline-logs-list") ? JSON.parse(localStorage.getItem("pipeline-logs-list")) : [...defaultPipelineData];
-      pData.forEach(item => {
-        if(document.getElementById(`p-title-${item.id}`)) item.title = document.getElementById(`p-title-${item.id}`).innerText;
-      });
-      localStorage.setItem("pipeline-logs-list", JSON.stringify(pData));
-
-      alert("💾 All structural modules cleanly synchronized across layouts.");
-    }
-
-    function switchTab(targetTabId) {
-      document.querySelectorAll('.content-tab').forEach(tab => tab.classList.remove('active'));
-      document.getElementById('tab-' + targetTabId).classList.add('active');
-      document.querySelectorAll('.portfolio-nav-btn').forEach(btn => {
-        btn.classList.remove('text-stone-900', 'bg-stone-200/60'); btn.classList.add('text-stone-600');
-      });
-      const curr = document.getElementById('tab-btn-' + targetTabId);
-      if(curr) { curr.classList.remove('text-stone-600'); curr.classList.add('text-stone-900', 'bg-stone-200/60'); }
-    }
-  </script>
-</body>
-</html>
+          <h4 id="p-title-${item
