@@ -44,7 +44,7 @@
   <nav class="bg-[#FAFAF9]/90 backdrop-blur-md border-b border-stone-200 sticky top-0 z-50">
     <div class="max-w-5xl mx-auto px-6 flex justify-between items-center h-20">
       <div>
-        <button onclick="toggleAdminPanel()" class="text-[10px] font-bold uppercase tracking-widest text-stone-400 hover:text-stone-900 transition-colors">🔒 Terminal Access</button>
+        <button onclick="triggerTerminalLogin()" class="text-[10px] font-bold uppercase tracking-widest text-stone-400 hover:text-stone-900 transition-colors">🔒 Terminal Access</button>
       </div>
       
       <div class="flex flex-wrap items-center gap-1 justify-end py-2">
@@ -61,17 +61,6 @@
     <div class="max-w-5xl mx-auto flex justify-between items-center">
       <span class="text-xs font-bold uppercase tracking-wider">🛠️ Editing Terminal Active — Changes live in browser layout</span>
       <button onclick="executeSaveAction()" class="bg-white text-emerald-700 font-extrabold text-[10px] uppercase tracking-widest px-4 py-2 rounded-lg hover:bg-stone-50 shadow transition-all">Save Matrix Changes</button>
-    </div>
-  </div>
-
-  <div id="admin-modal" class="hidden fixed inset-0 bg-stone-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white border border-stone-200 rounded-3xl p-6 max-w-sm w-full space-y-4 shadow-xl">
-      <h3 class="font-black text-stone-900 text-sm uppercase tracking-wider">Authorize Page Control</h3>
-      <input type="password" id="admin-pass-input" placeholder="Enter System Password" class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm font-semibold focus:outline-none">
-      <div class="flex gap-2">
-        <button onclick="verifyAdminAccess()" class="w-full bg-stone-900 text-white font-bold text-xs uppercase tracking-wider py-3 rounded-xl">Verify</button>
-        <button onclick="toggleAdminPanel()" class="w-full bg-stone-100 text-stone-600 font-bold text-xs uppercase tracking-wider py-3 rounded-xl border">Cancel</button>
-      </div>
     </div>
   </div>
 
@@ -201,7 +190,6 @@
         if(localStorage.getItem(id)) document.getElementById(id).innerText = localStorage.getItem(id);
       });
 
-      // Synchronize Target URLs
       if(localStorage.getItem("dynamic-venture-url")) {
         const customUrl = localStorage.getItem("dynamic-venture-url");
         document.getElementById("dynamic-agency-anchor").href = customUrl;
@@ -302,4 +290,86 @@
       data.forEach(item => {
         const div = document.createElement("div"); div.className = "bg-white border border-stone-200 p-6 rounded-2xl shadow-sm flex justify-between items-center gap-4";
         div.innerHTML = `
-          <h4 id="p-title-${item
+          <h4 id="p-title-${item.id}" class="editable-field font-black uppercase text-stone-900 flex-grow">${item.title}</h4>
+          <button onclick="deleteModuleItem('pipeline-logs-list', '${item.id}')" class="hidden admin-action-btn text-[10px] text-red-600 border border-red-200 bg-red-50 px-2 py-0.5 rounded-md font-bold uppercase hover:bg-red-100 whitespace-nowrap">🗑️ Delete</button>`;
+        container.appendChild(div);
+      });
+      setEditableStates();
+    }
+
+    function deleteModuleItem(storageKey, targetId) {
+      if(confirm("Are you sure you want to permanently erase this layout card parameter?")) {
+        let activeDefaults = storageKey === 'timeline-logs-list' ? defaultTimelineData 
+                           : storageKey === 'book-logs-list' ? defaultBookData 
+                           : storageKey === 'career-logs-list' ? defaultCareerData 
+                           : defaultPipelineData;
+        let list = localStorage.getItem(storageKey) ? JSON.parse(localStorage.getItem(storageKey)) : [...activeDefaults];
+        list = list.filter(item => item.id !== targetId);
+        localStorage.setItem(storageKey, JSON.stringify(list));
+        renderAllDynamicModules();
+      }
+    }
+
+    function createNewVentureLog() {
+      const list = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : [...defaultTimelineData];
+      list.unshift({ id: "tl-" + Date.now(), marker: `Venture Log #0${list.length + 1}`, title: "NEW DYNAMIC VENTURE CAPABILITY", body: "Click here to summarize project mechanics." });
+      localStorage.setItem("timeline-logs-list", JSON.stringify(list)); renderTimelineList();
+    }
+
+    function createNewBookLog() {
+      const list = localStorage.getItem("book-logs-list") ? JSON.parse(localStorage.getItem("book-logs-list")) : [...defaultBookData];
+      list.unshift({ id: "bk-" + Date.now(), title: "[ NEW UNTITLED MANUSCRIPT ENTRY ]", body: "Click here to draft framework strategies." });
+      localStorage.setItem("book-logs-list", JSON.stringify(list)); renderBookList();
+    }
+
+    function createNewCareerLog() {
+      const list = localStorage.getItem("career-logs-list") ? JSON.parse(localStorage.getItem("career-logs-list")) : [...defaultCareerData];
+      list.unshift({ id: "cr-" + Date.now(), title: "NEW LOGISTICAL MILESTONE TARGET", body: "Click here to detail objective project parameters." });
+      localStorage.setItem("career-logs-list", JSON.stringify(list)); renderCareerList();
+    }
+
+    function createNewPipelineLog() {
+      const list = localStorage.getItem("pipeline-logs-list") ? JSON.parse(localStorage.getItem("pipeline-logs-list")) : [...defaultPipelineData];
+      list.unshift({ id: "pl-" + Date.now(), title: "NEW INFOLDER INITIATIVE CONCEPT" });
+      localStorage.setItem("pipeline-logs-list", JSON.stringify(list)); renderPipelineGrid();
+    }
+
+    function setEditableStates() {
+      if (document.body.classList.contains("admin-mode")) {
+        document.querySelectorAll('.editable-field').forEach(el => el.contentEditable = "true");
+        document.getElementById("dynamic-url-input-box").classList.remove("hidden");
+      }
+    }
+
+    // Bulletproof Native Prompt Terminal Fallback Router Function
+    function triggerTerminalLogin() {
+      const accessPassword = prompt("Authorize Page Control - Enter System Password:");
+      if (accessPassword === "akku2026") {
+        document.body.classList.add('admin-mode');
+        setEditableStates();
+        alert("🔒 Terminal Unlocked. Management engines active across all layout channels.");
+      } else if (accessPassword !== null) {
+        alert("Access Denied.");
+      }
+    }
+
+    function executeSaveAction() {
+      const core = ["profile-name", "profile-tag", "intro-headline", "intro-body"];
+      core.forEach(id => localStorage.setItem(id, document.getElementById(id).innerText));
+
+      const rawInputUrl = document.getElementById("dynamic-url-input-box").innerText.trim();
+      localStorage.setItem("dynamic-venture-url", rawInputUrl);
+      document.getElementById("dynamic-agency-anchor").href = rawInputUrl;
+      updateDynamicLinkLabel(rawInputUrl);
+
+      const tData = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : [...defaultTimelineData];
+      tData.forEach(item => {
+        if(document.getElementById(`t-title-${item.id}`)) item.title = document.getElementById(`t-title-${item.id}`).innerText;
+        if(document.getElementById(`t-body-${item.id}`)) item.body = document.getElementById(`t-body-${item.id}`).innerText;
+      });
+      localStorage.setItem("timeline-logs-list", JSON.stringify(tData));
+
+      const bData = localStorage.getItem("book-logs-list") ? JSON.parse(localStorage.getItem("book-logs-list")) : [...defaultBookData];
+      bData.forEach(item => {
+        if(document.getElementById(`b-title-${item.id}`)) item.title = document.getElementById(`b-title-${item.id}`).innerText;
+        if(document.getElementById(`b-body-${item.id}`)) item.body = document.
