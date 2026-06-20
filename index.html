@@ -20,56 +20,98 @@
     }
   </script>
 
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // ⬇️ PASTE YOUR EXACT CUSTOM FIREBASE CONFIG OBJECT HERE ⬇️
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    // Initialize Firebase Services
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.db = db;
+    window.doc = doc;
+    window.setDoc = setDoc;
+  </script>
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap');
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
     .content-tab { display: none; }
     .content-tab.active { display: block; }
+    .admin-only { display: none; }
+    body.admin-mode .admin-only { display: block; }
   </style>
 </head>
 <body class="bg-[#FAFAF9] text-[#1C1917] min-h-screen flex flex-col justify-between selection:bg-stone-200">
 
   <nav class="bg-[#FAFAF9]/90 backdrop-blur-md border-b border-stone-200 sticky top-0 z-50">
-    <div class="max-w-5xl mx-auto px-6">
-      <div class="flex justify-between items-center h-20">
-        <div></div>
-        
-        <div class="flex flex-wrap items-center gap-1 justify-end py-2">
-          <button onclick="switchTab('bio')" id="tab-btn-bio" class="portfolio-nav-btn px-3 py-2 rounded-xl font-bold text-xs uppercase tracking-wider text-stone-900 bg-stone-200/60">Profile</button>
-          <button onclick="switchTab('story')" id="tab-btn-story" class="portfolio-nav-btn px-3 py-2 rounded-xl font-bold text-xs uppercase tracking-wider text-stone-600 hover:bg-stone-100">Live Story</button>
-          <button onclick="switchTab('books')" id="tab-btn-books" class="portfolio-nav-btn px-3 py-2 rounded-xl font-bold text-xs uppercase tracking-wider text-stone-600 hover:bg-stone-100">Book Room</button>
-          <button onclick="switchTab('career')" id="tab-btn-career" class="portfolio-nav-btn px-3 py-2 rounded-xl font-bold text-xs uppercase tracking-wider text-stone-600 hover:bg-stone-100">Career Log</button>
-          <button onclick="switchTab('pipeline')" id="tab-btn-pipeline" class="portfolio-nav-btn px-3 py-2 rounded-xl font-bold text-xs uppercase tracking-wider text-stone-600 hover:bg-stone-100">Pipeline</button>
-        </div>
+    <div class="max-w-5xl mx-auto px-6 flex justify-between items-center h-20">
+      <div>
+        <button onclick="toggleAdminPanel()" class="text-[10px] font-bold uppercase tracking-widest text-stone-400 hover:text-stone-900 transition-colors">🔒 Terminal Access</button>
+      </div>
+      
+      <div class="flex flex-wrap items-center gap-1 justify-end py-2">
+        <button onclick="switchTab('bio')" id="tab-btn-bio" class="portfolio-nav-btn px-3 py-2 rounded-xl font-bold text-xs uppercase tracking-wider text-stone-900 bg-stone-200/60">Profile</button>
+        <button onclick="switchTab('story')" id="tab-btn-story" class="portfolio-nav-btn px-3 py-2 rounded-xl font-bold text-xs uppercase tracking-wider text-stone-600 hover:bg-stone-100">Live Story</button>
+        <button onclick="switchTab('books')" id="tab-btn-books" class="portfolio-nav-btn px-3 py-2 rounded-xl font-bold text-xs uppercase tracking-wider text-stone-600 hover:bg-stone-100">Book Room</button>
+        <button onclick="switchTab('career')" id="tab-btn-career" class="portfolio-nav-btn px-3 py-2 rounded-xl font-bold text-xs uppercase tracking-wider text-stone-600 hover:bg-stone-100">Career Log</button>
+        <button onclick="switchTab('pipeline')" id="tab-btn-pipeline" class="portfolio-nav-btn px-3 py-2 rounded-xl font-bold text-xs uppercase tracking-wider text-stone-600 hover:bg-stone-100">Pipeline</button>
       </div>
     </div>
   </nav>
+
+  <div id="admin-modal" class="hidden fixed inset-0 bg-stone-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white border border-stone-200 rounded-3xl p-6 max-w-sm w-full space-y-4 shadow-xl">
+      <h3 class="font-black text-stone-900 text-sm uppercase tracking-wider">Authorize Page Control</h3>
+      <input type="password" id="admin-pass-input" placeholder="Enter System Password" class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm font-semibold focus:outline-none">
+      <div class="flex gap-2">
+        <button onclick="verifyAdminAccess()" class="w-full bg-stone-900 text-white font-bold text-xs uppercase tracking-wider py-3 rounded-xl">Verify</button>
+        <button onclick="toggleAdminPanel()" class="w-full bg-stone-100 text-stone-600 font-bold text-xs uppercase tracking-wider py-3 rounded-xl border">Cancel</button>
+      </div>
+    </div>
+  </div>
 
   <main class="flex-grow max-w-5xl mx-auto w-full px-6 py-12">
     
     <section id="tab-bio" class="content-tab active space-y-16 animate-in fade-in duration-300">
       <div class="grid md:grid-cols-3 gap-12 items-stretch">
         
-        <div class="bg-white border border-stone-200 rounded-3xl p-6 flex flex-col justify-between shadow-sm md:col-span-1 min-h-[480px]">
+        <div class="bg-white border border-stone-200 rounded-3xl p-6 flex flex-col justify-between shadow-sm md:col-span-1 min-h-[520px]">
           <div class="space-y-6 flex-grow flex flex-col justify-center">
-            <div class="w-full aspect-[4/5] bg-stone-100 rounded-2xl overflow-hidden border border-stone-200 shadow-inner flex items-center justify-center relative group">
-              <span class="text-stone-400 text-xs font-bold uppercase tracking-wider absolute group-hover:opacity-0 transition-opacity">Photo Slot</span>
-              <img src="profile.png" alt="Sanjeev Balaji" class="w-full h-full object-cover font-bold text-xs text-center text-stone-400 pt-20" onerror="this.style.display='none'">
+            
+            <div class="w-full aspect-[4/5] bg-stone-50 rounded-2xl overflow-hidden border border-stone-200 shadow-inner flex items-center justify-center relative">
+              <img src="profile.png" alt="Sanjeev Balaji" class="w-full h-full object-cover" onerror="this.src='profile.jpeg'; this.onerror=function(){this.parentElement.innerHTML='<span class=\'text-stone-400 text-xs font-bold uppercase tracking-wider\'>Photo Frame Active</span>'}">
             </div>
             
-            <div class="text-center space-y-1">
-              <h3 class="font-black text-stone-900 uppercase tracking-wide text-2xl">Sanjeev Balaji</h3>
-              <p class="text-xs font-extrabold text-[#943A3A] uppercase tracking-widest bg-red-50 border border-red-100 px-3 py-1 rounded-full inline-block">Very Good Human</p>
+            <div class="text-center space-y-2">
+              <h3 id="profile-name" contenteditable="false" class="font-black text-stone-900 uppercase tracking-wide text-2xl">Sanjeev Balaji</h3>
+              <div>
+                <p id="profile-tag" contenteditable="false" class="text-xs font-extrabold text-[#943A3A] uppercase tracking-widest bg-red-50 border border-red-100 px-4 py-1.5 rounded-full inline-block">Very Good Human</p>
+              </div>
             </div>
+          </div>
+          
+          <div class="admin-only pt-4 border-t border-stone-100">
+            <button onclick="saveProfileChanges()" class="w-full bg-emerald-600 text-white font-bold text-[10px] uppercase tracking-wider py-2 rounded-lg hover:bg-emerald-700">Save Local Content Changes</button>
           </div>
         </div>
 
         <div class="md:col-span-2 flex flex-col justify-center space-y-6">
           <span class="text-xs font-bold uppercase tracking-widest text-stone-500 bg-stone-100 border border-stone-200 px-3 py-1 rounded-full inline-block">The Master Dashboard</span>
-          <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-stone-900 uppercase leading-tight">
+          <h1 id="intro-headline" class="text-4xl sm:text-5xl font-extrabold tracking-tight text-stone-900 uppercase leading-tight">
             Ideas. Works. <br/>Career. Blogs.
           </h1>
-          <p class="text-stone-600 font-medium leading-relaxed text-base sm:text-lg">
+          <p id="intro-body" class="text-stone-600 font-medium leading-relaxed text-base sm:text-lg">
             This is the definitive portfolio of my personal blueprints, high-level career concepts, and active live blogs. From mechanical engineering principles to launching hyper-custom industrial spaces like Akku Hybrid Systems, I don't just draft concepts—I construct them flawlessly. 
           </p>
           <p class="text-stone-700 font-bold leading-relaxed text-sm uppercase tracking-wide bg-stone-100 p-5 border border-stone-200 rounded-2xl">
@@ -89,9 +131,14 @@
     </section>
 
     <section id="tab-story" class="content-tab max-w-3xl mx-auto py-4">
-      <div class="mb-12">
-        <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">The Journey Archive</h2>
-        <p class="text-xs text-stone-500 font-bold uppercase tracking-wider mt-1">Real-time lifecycle updates, structural realizations, and venture deployments</p>
+      <div class="mb-12 flex justify-between items-center">
+        <div>
+          <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">The Journey Archive</h2>
+          <p class="text-xs text-stone-500 font-bold uppercase tracking-wider mt-1">Real-time lifecycle updates, structural realizations, and venture deployments</p>
+        </div>
+        <div class="admin-only">
+          <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="rounded border-stone-300 text-stone-900 focus:ring-0"> <span class="text-xs font-bold uppercase text-stone-500">Public Live</span></label>
+        </div>
       </div>
 
       <div class="relative border-l border-stone-200 ml-4 pl-8 space-y-12">
@@ -155,6 +202,40 @@
   </footer>
 
   <script>
+    function toggleAdminPanel() {
+      const modal = document.getElementById('admin-modal');
+      modal.classList.toggle('hidden');
+    }
+
+    function verifyAdminAccess() {
+      const input = document.getElementById('admin-pass-input').value;
+      // Set your secure access phrase right here
+      if (input === "akku2026") {
+        document.body.classList.add('admin-mode');
+        document.getElementById('profile-name').contentEditable = "true";
+        document.getElementById('profile-tag').contentEditable = "true";
+        toggleAdminPanel();
+        alert("System Unlocked. Live Text Fields Active.");
+      } else {
+        alert("Access Denied.");
+      }
+    }
+
+    async function saveProfileChanges() {
+      const nameVal = document.getElementById('profile-name').innerText;
+      const tagVal = document.getElementById('profile-tag').innerText;
+      
+      try {
+        await window.setDoc(window.doc(window.db, "portfolioData", "profile"), {
+          name: nameVal,
+          tagline: tagVal
+        });
+        alert("Database Matrix Synchronized Successfully.");
+      } catch (e) {
+        console.error("Sync Error: ", e);
+      }
+    }
+
     function switchTab(targetTabId) {
       document.querySelectorAll('.content-tab').forEach(tab => tab.classList.remove('active'));
       document.getElementById('tab-' + targetTabId).classList.add('active');
