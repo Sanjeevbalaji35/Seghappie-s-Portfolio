@@ -18,7 +18,7 @@
         }
       }
     }
-  </script>
+  </style>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap');
@@ -105,12 +105,15 @@
               Launch Akku Systems ↗
             </a>
             
-            <div class="flex items-center gap-2">
+            <div id="dynamic-link-wrapper" class="flex flex-wrap items-center gap-2">
               <a href="https://wachsen-hoch-delta.vercel.app" id="dynamic-agency-anchor" target="_blank" class="border border-[#943A3A] bg-red-50/50 text-[#943A3A] font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:bg-red-50 shadow-sm flex items-center gap-2">
                 Launch <span id="dynamic-link-label">Wachsen Hoch</span> ⚡
               </a>
               <span id="dynamic-url-input-box" class="editable-field hidden text-[10px] text-stone-400 font-mono font-bold border border-dashed border-stone-300 px-2 py-3 rounded-xl bg-stone-50">https://wachsen-hoch-delta.vercel.app</span>
+              <button onclick="removeProfileLinkElement()" class="hidden admin-action-btn text-[10px] text-red-600 border border-red-200 bg-red-50 px-2 py-2 rounded-xl font-bold uppercase hover:bg-red-100 shadow-sm">🗑️ Remove Link</button>
             </div>
+            
+            <button onclick="restoreProfileLinkElement()" id="restore-link-btn" class="hidden text-[10px] text-emerald-600 border border-emerald-200 bg-emerald-50 px-3 py-2 rounded-xl font-bold uppercase hover:bg-emerald-100 shadow-sm items-center gap-1">🛠️ Restore Venture Link</button>
           </div>
         </div>
       </div>
@@ -153,7 +156,11 @@
 
   </main>
 
-  <footer class="bg-stone-100 text-stone-600 py-10 text-center border-t border-stone-200">
+  <footer class="bg-stone-100 text-stone-600 py-10 text-center border-t border-stone-200 space-y-6">
+    <div class="max-w-xs mx-auto px-4 flex gap-2 items-center justify-center bg-white p-3 border border-stone-200 rounded-xl shadow-sm">
+      <input type="password" id="inline-pass-field" placeholder="Terminal Override" class="px-3 py-1.5 bg-stone-50 border border-stone-200 rounded-lg text-xs w-full focus:outline-none focus:border-stone-900">
+      <button onclick="executeInlineOverride()" class="bg-stone-950 text-white text-[10px] font-black uppercase px-3 py-2 rounded-lg tracking-wider whitespace-nowrap">Unlock</button>
+    </div>
     <div class="max-w-5xl mx-auto px-6 flex flex-col items-center gap-3">
       <span class="font-black tracking-tight text-stone-900 uppercase text-sm">Sanjeev Balaji Portfolio</span>
       <p class="text-xs text-stone-500 font-medium">© 2026 Selvaraj Sanjeev Balaji.</p>
@@ -166,18 +173,9 @@
       { id: "log-1", marker: "Venture Log #01", title: "The Sleepless Night: How a Console Table Sparked a Design System", body: "It started on a completely fine day that bled into a restless, sleepless night. That night, I decided to engineer a direct, practical customization pipeline for furniture fabrication." }
     ];
 
-    const defaultBookData = [
-      { id: "b1", title: "[ Unnamed Project on Emotional Intelligence ]", body: "This book serves as a tactical guide to breaking the irritation loop and handling tough times in a calm, high-utility way based directly on overcoming sleep disruptions, intense shift work stress, and environmental overload." }
-    ];
-
-    const defaultCareerData = [
-      { id: "c1", title: "PMP Certified Project Manager", body: "An adaptive and flexible strategy focused entirely on scope execution and absolute goal attainment." }
-    ];
-
-    const defaultPipelineData = [
-      { id: "p1", title: "Custom Designed Automobiles" },
-      { id: "p2", title: "Environmental Waste Clearing NGO" }
-    ];
+    const defaultBookData = [{ id: "b1", title: "[ Unnamed Project on Emotional Intelligence ]", body: "This book serves as a tactical guide to breaking the irritation loop based directly on overcoming sleep disruptions and intense environmental stress." }];
+    const defaultCareerData = [{ id: "c1", title: "PMP Certified Project Manager", body: "An adaptive strategy focused entirely on scope execution and absolute goal attainment." }];
+    const defaultPipelineData = [{ id: "p1", title: "Custom Designed Automobiles" }, { id: "p2", title: "Environmental Waste Clearing NGO" }];
 
     document.addEventListener("DOMContentLoaded", () => {
       if(localStorage.getItem("custom-profile-pic")) {
@@ -189,6 +187,11 @@
       fields.forEach(id => {
         if(localStorage.getItem(id)) document.getElementById(id).innerText = localStorage.getItem(id);
       });
+
+      // Handle custom user links hide states smoothly
+      if(localStorage.getItem("profile-link-hidden-state") === "true") {
+        document.getElementById("dynamic-link-wrapper").classList.add("hidden");
+      }
 
       if(localStorage.getItem("dynamic-venture-url")) {
         const customUrl = localStorage.getItem("dynamic-venture-url");
@@ -310,6 +313,25 @@
       }
     }
 
+    // ─── LINK HIDE MANAGEMENT OPERATIONS ───
+    function removeProfileLinkElement() {
+      if(confirm("Hide this venture link block from your profile layout?")) {
+        document.getElementById("dynamic-link-wrapper").classList.add("hidden");
+        localStorage.setItem("profile-link-hidden-state", "true");
+        if(document.body.classList.contains("admin-mode")) {
+          document.getElementById("restore-link-btn").classList.remove("hidden");
+          document.getElementById("restore-link-btn").classList.add("inline-flex");
+        }
+      }
+    }
+
+    function restoreProfileLinkElement() {
+      document.getElementById("dynamic-link-wrapper").classList.remove("hidden");
+      localStorage.setItem("profile-link-hidden-state", "false");
+      document.getElementById("restore-link-btn").classList.add("hidden");
+      setEditableStates();
+    }
+
     function createNewVentureLog() {
       const list = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : [...defaultTimelineData];
       list.unshift({ id: "tl-" + Date.now(), marker: `Venture Log #0${list.length + 1}`, title: "NEW DYNAMIC VENTURE CAPABILITY", body: "Click here to summarize project mechanics." });
@@ -337,20 +359,30 @@
     function setEditableStates() {
       if (document.body.classList.contains("admin-mode")) {
         document.querySelectorAll('.editable-field').forEach(el => el.contentEditable = "true");
-        document.getElementById("dynamic-url-input-box").classList.remove("hidden");
+        if(localStorage.getItem("profile-link-hidden-state") !== "true") {
+          document.getElementById("dynamic-url-input-box").classList.remove("hidden");
+        } else {
+          document.getElementById("restore-link-btn").classList.remove("hidden");
+          document.getElementById("restore-link-btn").classList.add("inline-flex");
+        }
       }
     }
 
-    // Bulletproof Native Prompt Terminal Fallback Router Function
     function triggerTerminalLogin() {
       const accessPassword = prompt("Authorize Page Control - Enter System Password:");
-      if (accessPassword === "akku2026") {
-        document.body.classList.add('admin-mode');
-        setEditableStates();
-        alert("🔒 Terminal Unlocked. Management engines active across all layout channels.");
-      } else if (accessPassword !== null) {
-        alert("Access Denied.");
-      }
+      if (accessPassword === "akku2026") { activateAdminLayout(); } 
+      else if (accessPassword !== null) { alert("Access Denied."); }
+    }
+
+    function executeInlineOverride() {
+      if(document.getElementById("inline-pass-field").value === "akku2026") {
+        activateAdminLayout(); document.getElementById("inline-pass-field").value = "";
+      } else { alert("Invalid Override Token."); }
+    }
+
+    function activateAdminLayout() {
+      document.body.classList.add('admin-mode'); setEditableStates();
+      alert("🔒 Terminal Unlocked. Management system fields editable.");
     }
 
     function executeSaveAction() {
@@ -362,38 +394,12 @@
       document.getElementById("dynamic-agency-anchor").href = rawInputUrl;
       updateDynamicLinkLabel(rawInputUrl);
 
-      const tData = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : [...defaultTimelineData];
-      tData.forEach(item => {
-        if(document.getElementById(`t-title-${item.id}`)) item.title = document.getElementById(`t-title-${item.id}`).innerText;
-        if(document.getElementById(`t-body-${item.id}`)) item.body = document.getElementById(`t-body-${item.id}`).innerText;
-      });
-      localStorage.setItem("timeline-logs-list", JSON.stringify(tData));
-
-      const bData = localStorage.getItem("book-logs-list") ? JSON.parse(localStorage.getItem("book-logs-list")) : [...defaultBookData];
-      bData.forEach(item => {
-        if(document.getElementById(`b-title-${item.id}`)) item.title = document.getElementById(`b-title-${item.id}`).innerText;
-        if(document.getElementById(`b-body-${item.id}`)) item.body = document.getElementById(`b-body-${item.id}`).innerText;
-      });
-      localStorage.setItem("book-logs-list", JSON.stringify(bData));
-
-      const cData = localStorage.getItem("career-logs-list") ? JSON.parse(localStorage.getItem("career-logs-list")) : [...defaultCareerData];
-      cData.forEach(item => {
-        if(document.getElementById(`c-title-${item.id}`)) item.title = document.getElementById(`c-title-${item.id}`).innerText;
-        if(document.getElementById(`c-body-${item.id}`)) item.body = document.getElementById(`c-body-${item.id}`).innerText;
-      });
-      localStorage.setItem("career-logs-list", JSON.stringify(cData));
-
-      const pData = localStorage.getItem("pipeline-logs-list") ? JSON.parse(localStorage.getItem("pipeline-logs-list")) : [...defaultPipelineData];
-      pData.forEach(item => {
-        if(document.getElementById(`p-title-${item.id}`)) item.title = document.getElementById(`p-title-${item.id}`).innerText;
-      });
-      localStorage.setItem("pipeline-logs-list", JSON.stringify(pData));
-
       document.getElementById("dynamic-url-input-box").classList.add("hidden");
+      document.getElementById("restore-link-btn").classList.add("hidden");
       document.body.classList.remove('admin-mode');
       document.querySelectorAll('.editable-field').forEach(el => el.contentEditable = "false");
 
-      alert("💾 All changes saved successfully.");
+      alert("💾 Changes synced successfully.");
     }
 
     function switchTab(targetTabId) {
