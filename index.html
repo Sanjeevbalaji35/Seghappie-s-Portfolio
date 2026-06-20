@@ -372,4 +372,39 @@
       const bData = localStorage.getItem("book-logs-list") ? JSON.parse(localStorage.getItem("book-logs-list")) : [...defaultBookData];
       bData.forEach(item => {
         if(document.getElementById(`b-title-${item.id}`)) item.title = document.getElementById(`b-title-${item.id}`).innerText;
-        if(document.getElementById(`b-body-${item.id}`)) item.body = document.
+        if(document.getElementById(`b-body-${item.id}`)) item.body = document.getElementById(`b-body-${item.id}`).innerText;
+      });
+      localStorage.setItem("book-logs-list", JSON.stringify(bData));
+
+      const cData = localStorage.getItem("career-logs-list") ? JSON.parse(localStorage.getItem("career-logs-list")) : [...defaultCareerData];
+      cData.forEach(item => {
+        if(document.getElementById(`c-title-${item.id}`)) item.title = document.getElementById(`c-title-${item.id}`).innerText;
+        if(document.getElementById(`c-body-${item.id}`)) item.body = document.getElementById(`c-body-${item.id}`).innerText;
+      });
+      localStorage.setItem("career-logs-list", JSON.stringify(cData));
+
+      const pData = localStorage.getItem("pipeline-logs-list") ? JSON.parse(localStorage.getItem("pipeline-logs-list")) : [...defaultPipelineData];
+      pData.forEach(item => {
+        if(document.getElementById(`p-title-${item.id}`)) item.title = document.getElementById(`p-title-${item.id}`).innerText;
+      });
+      localStorage.setItem("pipeline-logs-list", JSON.stringify(pData));
+
+      document.getElementById("dynamic-url-input-box").classList.add("hidden");
+      document.body.classList.remove('admin-mode');
+      document.querySelectorAll('.editable-field').forEach(el => el.contentEditable = "false");
+
+      alert("💾 All changes saved successfully.");
+    }
+
+    function switchTab(targetTabId) {
+      document.querySelectorAll('.content-tab').forEach(tab => tab.classList.remove('active'));
+      document.getElementById('tab-' + targetTabId).classList.add('active');
+      document.querySelectorAll('.portfolio-nav-btn').forEach(btn => {
+        btn.classList.remove('text-stone-900', 'bg-stone-200/60'); btn.classList.add('text-stone-600');
+      });
+      const curr = document.getElementById('tab-btn-' + targetTabId);
+      if(curr) { curr.classList.remove('text-stone-600'); curr.classList.add('text-stone-900', 'bg-stone-200/60'); }
+    }
+  </script>
+</body>
+</html>
