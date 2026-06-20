@@ -178,6 +178,11 @@
     const defaultPipelineData = [{ id: "p1", title: "Custom Designed Automobiles" }, { id: "p2", title: "Environmental Waste Clearing NGO" }];
 
     document.addEventListener("DOMContentLoaded", () => {
+      // Automatic cache reset engine to flush structural line freezes instantly on refresh
+      if (localStorage.getItem("dynamic-venture-url") && localStorage.getItem("dynamic-venture-url").includes("|")) {
+        localStorage.removeItem("dynamic-venture-url");
+      }
+
       if(localStorage.getItem("custom-profile-pic")) {
         document.getElementById("profile-display-img").src = localStorage.getItem("custom-profile-pic");
         document.getElementById('img-placeholder-text').classList.add('hidden');
@@ -192,12 +197,13 @@
         document.getElementById("dynamic-link-wrapper").classList.add("hidden");
       }
 
+      let targetUrl = "https://wachsen-hoch-delta.vercel.app";
       if(localStorage.getItem("dynamic-venture-url")) {
-        const customUrl = localStorage.getItem("dynamic-venture-url");
-        document.getElementById("dynamic-agency-anchor").href = customUrl;
-        document.getElementById("dynamic-url-input-box").innerText = customUrl;
-        updateDynamicLinkLabel(customUrl);
+        targetUrl = localStorage.getItem("dynamic-venture-url").trim();
       }
+      document.getElementById("dynamic-agency-anchor").href = targetUrl;
+      document.getElementById("dynamic-url-input-box").innerText = targetUrl;
+      updateDynamicLinkLabel(targetUrl);
 
       renderAllDynamicModules();
     });
@@ -317,3 +323,108 @@
         localStorage.setItem("profile-link-hidden-state", "true");
         if(document.body.classList.contains("admin-mode")) {
           document.getElementById("restore-link-btn").classList.remove("hidden");
+          document.getElementById("restore-link-btn").classList.add("inline-flex");
+        }
+      }
+    }
+
+    function restoreProfileLinkElement() {
+      document.getElementById("dynamic-link-wrapper").classList.remove("hidden");
+      localStorage.setItem("profile-link-hidden-state", "false");
+      document.getElementById("restore-link-btn").classList.add("hidden");
+      setEditableStates();
+    }
+
+    function createNewVentureLog() {
+      const list = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : [...defaultTimelineData];
+      list.unshift({ id: "tl-" + Date.now(), marker: `Venture Log #0${list.length + 1}`, title: "NEW DYNAMIC VENTURE CAPABILITY", body: "Click here to summarize project mechanics." });
+      localStorage.setItem("timeline-logs-list", JSON.stringify(list)); renderTimelineList();
+    }
+
+    function createNewBookLog() {
+      const list = localStorage.getItem("book-logs-list") ? JSON.parse(localStorage.getItem("book-logs-list")) : [...defaultBookData];
+      list.unshift({ id: "bk-" + Date.now(), title: "[ NEW UNTITLED MANUSCRIPT ENTRY ]", body: "Click here to draft framework strategies." });
+      localStorage.setItem("book-logs-list", JSON.stringify(list)); renderBookList();
+    }
+
+    function createNewCareerLog() {
+      const list = localStorage.getItem("career-logs-list") ? JSON.parse(localStorage.getItem("career-logs-list")) : [...defaultCareerData];
+      list.unshift({ id: "cr-" + Date.now(), title: "NEW LOGISTICAL MILESTONE TARGET", body: "Click here to detail objective project parameters." });
+      localStorage.setItem("career-logs-list", JSON.stringify(list)); renderCareerList();
+    }
+
+    function createNewPipelineLog() {
+      const list = localStorage.getItem("pipeline-logs-list") ? JSON.parse(localStorage.getItem("pipeline-logs-list")) : [...defaultPipelineData];
+      list.unshift({ id: "pl-" + Date.now(), title: "NEW INFOLDER INITIATIVE CONCEPT" });
+      localStorage.setItem("pipeline-logs-list", JSON.stringify(list)); renderPipelineGrid();
+    }
+
+    function setEditableStates() {
+      if (document.body.classList.contains("admin-mode")) {
+        document.querySelectorAll('.editable-field').forEach(el => el.contentEditable = "true");
+        if(localStorage.getItem("profile-link-hidden-state") !== "true") {
+          document.getElementById("dynamic-url-input-box").classList.remove("hidden");
+        } else {
+          document.getElementById("restore-link-btn").classList.remove("hidden");
+          document.getElementById("restore-link-btn").classList.add("inline-flex");
+        }
+      }
+    }
+
+    function triggerTerminalLogin() {
+      const accessPassword = prompt("Authorize Page Control - Enter System Password:");
+      if (accessPassword === "akku2026") { activateAdminLayout(); } 
+      else if (accessPassword !== null) { alert("Access Denied."); }
+    }
+
+    function executeInlineOverride() {
+      if(document.getElementById("inline-pass-field").value === "akku2026") {
+        activateAdminLayout(); document.getElementById("inline-pass-field").value = "";
+      } else { alert("Invalid Override Token."); }
+    }
+
+    function activateAdminLayout() {
+      document.body.classList.add('admin-mode'); setEditableStates();
+      alert("🔒 Terminal Unlocked. Fields are now editable.");
+    }
+
+    function executeSaveAction() {
+      const core = ["profile-name", "profile-tag", "intro-headline", "intro-body"];
+      core.forEach(id => localStorage.setItem(id, document.getElementById(id).innerText));
+
+      let rawInputUrl = document.getElementById("dynamic-url-input-box").innerText.trim();
+      if(rawInputUrl.includes("|") || rawInputUrl === "") {
+        rawInputUrl = "https://wachsen-hoch-delta.vercel.app";
+      }
+      localStorage.setItem("dynamic-venture-url", rawInputUrl);
+      document.getElementById("dynamic-agency-anchor").href = rawInputUrl;
+      updateDynamicLinkLabel(rawInputUrl);
+
+      const tData = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : [...defaultTimelineData];
+      tData.forEach(item => {
+        if(document.getElementById(`t-title-${item.id}`)) item.title = document.getElementById(`t-title-${item.id}`).innerText;
+        if(document.getElementById(`t-body-${item.id}`)) item.body = document.getElementById(`t-body-${item.id}`).innerText;
+      });
+      localStorage.setItem("timeline-logs-list", JSON.stringify(tData));
+
+      document.getElementById("dynamic-url-input-box").classList.add("hidden");
+      document.getElementById("restore-link-btn").classList.add("hidden");
+      document.body.classList.remove('admin-mode');
+      document.querySelectorAll('.editable-field').forEach(el => el.contentEditable = "false");
+
+      alert("💾 Layout compiled and saved.");
+      window.location.reload(); 
+    }
+
+    function switchTab(targetTabId) {
+      document.querySelectorAll('.content-tab').forEach(tab => tab.classList.remove('active'));
+      document.getElementById('tab-' + targetTabId).classList.add('active');
+      document.querySelectorAll('.portfolio-nav-btn').forEach(btn => {
+        btn.classList.remove('text-stone-900', 'bg-stone-200/60'); btn.classList.add('text-stone-600');
+      });
+      const curr = document.getElementById('tab-btn-' + targetTabId);
+      if(curr) { curr.classList.remove('text-stone-600'); curr.classList.add('text-stone-900', 'bg-stone-200/60'); }
+    }
+  </script>
+</body>
+</html>
