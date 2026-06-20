@@ -18,7 +18,7 @@
         }
       }
     }
-  </style>
+  </script>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap');
@@ -110,7 +110,7 @@
                 Launch <span id="dynamic-link-label">Wachsen Hoch</span> ⚡
               </a>
               <span id="dynamic-url-input-box" class="editable-field hidden text-[10px] text-stone-400 font-mono font-bold border border-dashed border-stone-300 px-2 py-3 rounded-xl bg-stone-50">https://wachsen-hoch-delta.vercel.app</span>
-              <button onclick="removeProfileLinkElement()" class="hidden admin-action-btn text-[10px] text-red-600 border border-red-200 bg-red-50 px-2 py-2 rounded-xl font-bold uppercase hover:bg-red-100 shadow-sm">🗑️ Remove Link</button>
+              <button onclick="removeProfileLinkElement()" class="hidden admin-action-btn text-[10px] text-red-600 border border-red-200 bg-red-50 px-2 py-2 rounded-xl font-bold uppercase hover:bg-red-100 shadow-sm">🗑 ...</button>
             </div>
             
             <button onclick="restoreProfileLinkElement()" id="restore-link-btn" class="hidden text-[10px] text-emerald-600 border border-emerald-200 bg-emerald-50 px-3 py-2 rounded-xl font-bold uppercase hover:bg-emerald-100 shadow-sm items-center gap-1">🛠️ Restore Venture Link</button>
@@ -188,7 +188,6 @@
         if(localStorage.getItem(id)) document.getElementById(id).innerText = localStorage.getItem(id);
       });
 
-      // Handle custom user links hide states smoothly
       if(localStorage.getItem("profile-link-hidden-state") === "true") {
         document.getElementById("dynamic-link-wrapper").classList.add("hidden");
       }
@@ -239,178 +238,3 @@
       const container = document.getElementById("timeline-stack"); container.innerHTML = "";
       const data = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : defaultTimelineData;
       data.forEach(item => {
-        const block = document.createElement("div"); block.className = "relative group";
-        block.innerHTML = `
-          <div class="absolute -left-[41px] top-1 bg-stone-900 border-4 border-[#FAFAF9] rounded-full w-5 h-5"></div>
-          <div class="flex justify-between items-center mb-3">
-            <span class="text-[10px] font-extrabold text-[#943A3A] uppercase tracking-widest bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-md inline-block">${item.marker}</span>
-            <button onclick="deleteModuleItem('timeline-logs-list', '${item.id}')" class="hidden admin-action-btn text-[10px] text-red-600 border border-red-200 bg-red-50 px-2 py-0.5 rounded-md font-bold uppercase hover:bg-red-100">🗑️ Delete</button>
-          </div>
-          <div class="bg-white border border-stone-200 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4">
-            <h3 id="t-title-${item.id}" class="editable-field text-xl font-black text-stone-900 uppercase tracking-wide">${item.title}</h3>
-            <p id="t-body-${item.id}" class="editable-field text-stone-600 text-sm leading-relaxed font-medium">${item.body}</p>
-          </div>`;
-        container.appendChild(block);
-      });
-      setEditableStates();
-    }
-
-    function renderBookList() {
-      const container = document.getElementById("book-stack"); container.innerHTML = "";
-      const data = localStorage.getItem("book-logs-list") ? JSON.parse(localStorage.getItem("book-logs-list")) : defaultBookData;
-      data.forEach(item => {
-        const div = document.createElement("div"); div.className = "bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4 relative";
-        div.innerHTML = `
-          <div class="flex justify-end admin-only absolute top-4 right-4">
-            <button onclick="deleteModuleItem('book-logs-list', '${item.id}')" class="hidden admin-action-btn text-[10px] text-red-600 border border-red-200 bg-red-50 px-2 py-0.5 rounded-md font-bold uppercase hover:bg-red-100">🗑️ Delete</button>
-          </div>
-          <h3 id="b-title-${item.id}" class="editable-field text-2xl font-black text-stone-900 uppercase tracking-tight pr-16">${item.title}</h3>
-          <p id="b-body-${item.id}" class="editable-field text-stone-600 text-sm leading-relaxed font-medium">${item.body}</p>`;
-        container.appendChild(div);
-      });
-      setEditableStates();
-    }
-
-    function renderCareerList() {
-      const container = document.getElementById("career-stack"); container.innerHTML = "";
-      const data = localStorage.getItem("career-logs-list") ? JSON.parse(localStorage.getItem("career-logs-list")) : defaultCareerData;
-      data.forEach(item => {
-        const div = document.createElement("div"); div.className = "bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4 relative";
-        div.innerHTML = `
-          <div class="flex justify-end admin-only absolute top-4 right-4">
-            <button onclick="deleteModuleItem('career-logs-list', '${item.id}')" class="hidden admin-action-btn text-[10px] text-red-600 border border-red-200 bg-red-50 px-2 py-0.5 rounded-md font-bold uppercase hover:bg-red-100">🗑️ Delete</button>
-          </div>
-          <h3 id="c-title-${item.id}" class="editable-field text-2xl font-black text-stone-900 uppercase tracking-tight pr-16">${item.title}</h3>
-          <p id="c-body-${item.id}" class="editable-field text-stone-600 text-sm leading-relaxed font-medium">${item.body}</p>`;
-        container.appendChild(div);
-      });
-      setEditableStates();
-    }
-
-    function renderPipelineGrid() {
-      const container = document.getElementById("pipeline-grid"); container.innerHTML = "";
-      const data = localStorage.getItem("pipeline-logs-list") ? JSON.parse(localStorage.getItem("pipeline-logs-list")) : defaultPipelineData;
-      data.forEach(item => {
-        const div = document.createElement("div"); div.className = "bg-white border border-stone-200 p-6 rounded-2xl shadow-sm flex justify-between items-center gap-4";
-        div.innerHTML = `
-          <h4 id="p-title-${item.id}" class="editable-field font-black uppercase text-stone-900 flex-grow">${item.title}</h4>
-          <button onclick="deleteModuleItem('pipeline-logs-list', '${item.id}')" class="hidden admin-action-btn text-[10px] text-red-600 border border-red-200 bg-red-50 px-2 py-0.5 rounded-md font-bold uppercase hover:bg-red-100 whitespace-nowrap">🗑️ Delete</button>`;
-        container.appendChild(div);
-      });
-      setEditableStates();
-    }
-
-    function deleteModuleItem(storageKey, targetId) {
-      if(confirm("Are you sure you want to permanently erase this layout card parameter?")) {
-        let activeDefaults = storageKey === 'timeline-logs-list' ? defaultTimelineData 
-                           : storageKey === 'book-logs-list' ? defaultBookData 
-                           : storageKey === 'career-logs-list' ? defaultCareerData 
-                           : defaultPipelineData;
-        let list = localStorage.getItem(storageKey) ? JSON.parse(localStorage.getItem(storageKey)) : [...activeDefaults];
-        list = list.filter(item => item.id !== targetId);
-        localStorage.setItem(storageKey, JSON.stringify(list));
-        renderAllDynamicModules();
-      }
-    }
-
-    // ─── LINK HIDE MANAGEMENT OPERATIONS ───
-    function removeProfileLinkElement() {
-      if(confirm("Hide this venture link block from your profile layout?")) {
-        document.getElementById("dynamic-link-wrapper").classList.add("hidden");
-        localStorage.setItem("profile-link-hidden-state", "true");
-        if(document.body.classList.contains("admin-mode")) {
-          document.getElementById("restore-link-btn").classList.remove("hidden");
-          document.getElementById("restore-link-btn").classList.add("inline-flex");
-        }
-      }
-    }
-
-    function restoreProfileLinkElement() {
-      document.getElementById("dynamic-link-wrapper").classList.remove("hidden");
-      localStorage.setItem("profile-link-hidden-state", "false");
-      document.getElementById("restore-link-btn").classList.add("hidden");
-      setEditableStates();
-    }
-
-    function createNewVentureLog() {
-      const list = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : [...defaultTimelineData];
-      list.unshift({ id: "tl-" + Date.now(), marker: `Venture Log #0${list.length + 1}`, title: "NEW DYNAMIC VENTURE CAPABILITY", body: "Click here to summarize project mechanics." });
-      localStorage.setItem("timeline-logs-list", JSON.stringify(list)); renderTimelineList();
-    }
-
-    function createNewBookLog() {
-      const list = localStorage.getItem("book-logs-list") ? JSON.parse(localStorage.getItem("book-logs-list")) : [...defaultBookData];
-      list.unshift({ id: "bk-" + Date.now(), title: "[ NEW UNTITLED MANUSCRIPT ENTRY ]", body: "Click here to draft framework strategies." });
-      localStorage.setItem("book-logs-list", JSON.stringify(list)); renderBookList();
-    }
-
-    function createNewCareerLog() {
-      const list = localStorage.getItem("career-logs-list") ? JSON.parse(localStorage.getItem("career-logs-list")) : [...defaultCareerData];
-      list.unshift({ id: "cr-" + Date.now(), title: "NEW LOGISTICAL MILESTONE TARGET", body: "Click here to detail objective project parameters." });
-      localStorage.setItem("career-logs-list", JSON.stringify(list)); renderCareerList();
-    }
-
-    function createNewPipelineLog() {
-      const list = localStorage.getItem("pipeline-logs-list") ? JSON.parse(localStorage.getItem("pipeline-logs-list")) : [...defaultPipelineData];
-      list.unshift({ id: "pl-" + Date.now(), title: "NEW INFOLDER INITIATIVE CONCEPT" });
-      localStorage.setItem("pipeline-logs-list", JSON.stringify(list)); renderPipelineGrid();
-    }
-
-    function setEditableStates() {
-      if (document.body.classList.contains("admin-mode")) {
-        document.querySelectorAll('.editable-field').forEach(el => el.contentEditable = "true");
-        if(localStorage.getItem("profile-link-hidden-state") !== "true") {
-          document.getElementById("dynamic-url-input-box").classList.remove("hidden");
-        } else {
-          document.getElementById("restore-link-btn").classList.remove("hidden");
-          document.getElementById("restore-link-btn").classList.add("inline-flex");
-        }
-      }
-    }
-
-    function triggerTerminalLogin() {
-      const accessPassword = prompt("Authorize Page Control - Enter System Password:");
-      if (accessPassword === "akku2026") { activateAdminLayout(); } 
-      else if (accessPassword !== null) { alert("Access Denied."); }
-    }
-
-    function executeInlineOverride() {
-      if(document.getElementById("inline-pass-field").value === "akku2026") {
-        activateAdminLayout(); document.getElementById("inline-pass-field").value = "";
-      } else { alert("Invalid Override Token."); }
-    }
-
-    function activateAdminLayout() {
-      document.body.classList.add('admin-mode'); setEditableStates();
-      alert("🔒 Terminal Unlocked. Management system fields editable.");
-    }
-
-    function executeSaveAction() {
-      const core = ["profile-name", "profile-tag", "intro-headline", "intro-body"];
-      core.forEach(id => localStorage.setItem(id, document.getElementById(id).innerText));
-
-      const rawInputUrl = document.getElementById("dynamic-url-input-box").innerText.trim();
-      localStorage.setItem("dynamic-venture-url", rawInputUrl);
-      document.getElementById("dynamic-agency-anchor").href = rawInputUrl;
-      updateDynamicLinkLabel(rawInputUrl);
-
-      document.getElementById("dynamic-url-input-box").classList.add("hidden");
-      document.getElementById("restore-link-btn").classList.add("hidden");
-      document.body.classList.remove('admin-mode');
-      document.querySelectorAll('.editable-field').forEach(el => el.contentEditable = "false");
-
-      alert("💾 Changes synced successfully.");
-    }
-
-    function switchTab(targetTabId) {
-      document.querySelectorAll('.content-tab').forEach(tab => tab.classList.remove('active'));
-      document.getElementById('tab-' + targetTabId).classList.add('active');
-      document.querySelectorAll('.portfolio-nav-btn').forEach(btn => {
-        btn.classList.remove('text-stone-900', 'bg-stone-200/60'); btn.classList.add('text-stone-600');
-      });
-      const curr = document.getElementById('tab-btn-' + targetTabId);
-      if(curr) { curr.classList.remove('text-stone-600'); curr.classList.add('text-stone-900', 'bg-stone-200/60'); }
-    }
-  </script>
-</body>
-</html>
