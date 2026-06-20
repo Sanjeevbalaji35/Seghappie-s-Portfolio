@@ -209,13 +209,23 @@
 
     function verifyAdminAccess() {
       const input = document.getElementById('admin-pass-input').value;
-      // Set your secure access phrase right here
       if (input === "akku2026") {
         document.body.classList.add('admin-mode');
+        
+        // This explicitly unlocks all text areas on your screen for typing!
         document.getElementById('profile-name').contentEditable = "true";
         document.getElementById('profile-tag').contentEditable = "true";
+        document.getElementById('intro-headline').contentEditable = "true";
+        document.getElementById('intro-body').contentEditable = "true";
+        
+        // Adds a visual border highlight so you know exactly what fields you can edit
+        const fields = ['profile-name', 'profile-tag', 'intro-headline', 'intro-body'];
+        fields.forEach(id => {
+          document.getElementById(id).classList.add('ring-2', 'ring-emerald-500', 'p-1', 'rounded-lg', 'bg-emerald-50/30');
+        });
+
         toggleAdminPanel();
-        alert("System Unlocked. Live Text Fields Active.");
+        alert("🔒 Terminal Unlocked. Click directly on any highlighted text to edit it!");
       } else {
         alert("Access Denied.");
       }
