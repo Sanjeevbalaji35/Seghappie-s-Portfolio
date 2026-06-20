@@ -20,36 +20,22 @@
     }
   </script>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    // ⬇️ PASTE YOUR EXACT CUSTOM FIREBASE CONFIG OBJECT HERE ⬇️
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
-
-    // Initialize Firebase Services
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    window.db = db;
-    window.doc = doc;
-    window.setDoc = setDoc;
-  </script>
-
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap');
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
     .content-tab { display: none; }
     .content-tab.active { display: block; }
-    .admin-only { display: none; }
-    body.admin-mode .admin-only { display: block; }
+    
+    /* Edit Highlighting Mode Styles */
+    body.admin-mode .editable-field {
+      outline: 2px dashed #10B981 !important;
+      background-color: rgba(240, 253, 250, 0.5);
+      padding: 4px;
+      border-radius: 8px;
+      cursor: text;
+    }
+    .save-indicator { display: none; }
+    body.admin-mode .save-indicator { display: block; }
   </style>
 </head>
 <body class="bg-[#FAFAF9] text-[#1C1917] min-h-screen flex flex-col justify-between selection:bg-stone-200">
@@ -70,6 +56,13 @@
     </div>
   </nav>
 
+  <div class="save-indicator bg-emerald-600 text-white py-3 px-6 text-center sticky top-20 z-40 border-b border-emerald-700 shadow-md">
+    <div class="max-w-5xl mx-auto flex justify-between items-center">
+      <span class="text-xs font-bold uppercase tracking-wider">🛠️ Editing Terminal Active — Changes live in browser layout</span>
+      <button onclick="executeSaveAction()" class="bg-white text-emerald-700 font-extrabold text-[10px] uppercase tracking-widest px-4 py-2 rounded-lg hover:bg-stone-50 shadow transition-all">Save Matrix Changes</button>
+    </div>
+  </div>
+
   <div id="admin-modal" class="hidden fixed inset-0 bg-stone-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white border border-stone-200 rounded-3xl p-6 max-w-sm w-full space-y-4 shadow-xl">
       <h3 class="font-black text-stone-900 text-sm uppercase tracking-wider">Authorize Page Control</h3>
@@ -83,62 +76,37 @@
 
   <main class="flex-grow max-w-5xl mx-auto w-full px-6 py-12">
     
-    <section id="tab-bio" class="content-tab active space-y-16 animate-in fade-in duration-300">
+    <section id="tab-bio" class="content-tab active space-y-16">
       <div class="grid md:grid-cols-3 gap-12 items-stretch">
         
         <div class="bg-white border border-stone-200 rounded-3xl p-6 flex flex-col justify-between shadow-sm md:col-span-1 min-h-[520px]">
           <div class="space-y-6 flex-grow flex flex-col justify-center">
-            
             <div class="w-full aspect-[4/5] bg-stone-50 rounded-2xl overflow-hidden border border-stone-200 shadow-inner flex items-center justify-center relative">
-              <img src="profile.png" alt="Sanjeev Balaji" class="w-full h-full object-cover" onerror="this.src='profile.jpeg'; this.onerror=function(){this.parentElement.innerHTML='<span class=\'text-stone-400 text-xs font-bold uppercase tracking-wider\'>Photo Frame Active</span>'}">
+              <img src="profile.png" alt="Sanjeev Balaji" class="w-full h-full object-cover" onerror="this.src='profile.jpeg'; this.onerror=function(){this.src='WhatsApp Image 2026-06-21 at 12.19.55 AM.jpeg'; this.onerror=function(){this.parentElement.innerHTML='<span class=\'text-stone-400 text-xs font-bold\'>Photo Frame Active</span>'}}}">
             </div>
             
             <div class="text-center space-y-2">
-              <h3 id="profile-name" contenteditable="false" class="font-black text-stone-900 uppercase tracking-wide text-2xl">Sanjeev Balaji</h3>
+              <h3 id="profile-name" class="editable-field font-black text-stone-900 uppercase tracking-wide text-2xl">Sanjeev Balaji</h3>
               <div>
-                <p id="profile-tag" contenteditable="false" class="text-xs font-extrabold text-[#943A3A] uppercase tracking-widest bg-red-50 border border-red-100 px-4 py-1.5 rounded-full inline-block">Very Good Human</p>
+                <p id="profile-tag" class="editable-field text-xs font-extrabold text-[#943A3A] uppercase tracking-widest bg-red-50 border border-red-100 px-4 py-1.5 rounded-full inline-block">Very Good Human</p>
               </div>
             </div>
-          </div>
-          
-          <div class="admin-only pt-4 border-t border-stone-100">
-            <button onclick="saveProfileChanges()" class="w-full bg-emerald-600 text-white font-bold text-[10px] uppercase tracking-wider py-2 rounded-lg hover:bg-emerald-700">Save Local Content Changes</button>
           </div>
         </div>
 
         <div class="md:col-span-2 flex flex-col justify-center space-y-6">
           <span class="text-xs font-bold uppercase tracking-widest text-stone-500 bg-stone-100 border border-stone-200 px-3 py-1 rounded-full inline-block">The Master Dashboard</span>
-          <h1 id="intro-headline" class="text-4xl sm:text-5xl font-extrabold tracking-tight text-stone-900 uppercase leading-tight">
-            Ideas. Works. <br/>Career. Blogs.
-          </h1>
-          <p id="intro-body" class="text-stone-600 font-medium leading-relaxed text-base sm:text-lg">
-            This is the definitive portfolio of my personal blueprints, high-level career concepts, and active live blogs. From mechanical engineering principles to launching hyper-custom industrial spaces like Akku Hybrid Systems, I don't just draft concepts—I construct them flawlessly. 
-          </p>
-          <p class="text-stone-700 font-bold leading-relaxed text-sm uppercase tracking-wide bg-stone-100 p-5 border border-stone-200 rounded-2xl">
-            📢 Consider this your primary pipeline monitor. Bookmark this hub and visit often to keep tabs on current project status modules, lifecycle milestones, and deployment logs as they drop live.
-          </p>
-          <div class="pt-2 flex flex-wrap gap-3">
-            <button onclick="switchTab('story')" class="bg-stone-900 text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:bg-stone-800 shadow-sm">
-              Read Live Timelines
-            </button>
-            <a href="https://akkucustomfurniture.vercel.app/" target="_blank" class="border border-stone-300 bg-white text-stone-900 font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:bg-stone-50 shadow-sm flex items-center gap-2">
-              Launch Akku Systems ↗
-            </a>
-          </div>
+          <h1 id="intro-headline" class="editable-field text-4xl sm:text-5xl font-extrabold tracking-tight text-stone-900 uppercase leading-tight">Ideas. Works. <br/>Career. Blogs.</h1>
+          <p id="intro-body" class="editable-field text-stone-600 font-medium leading-relaxed text-base sm:text-lg">This is the definitive portfolio of my personal blueprints, high-level career concepts, and active live blogs. From mechanical engineering principles to launching hyper-custom industrial spaces like Akku Hybrid Systems, I don't just draft concepts—I construct them flawlessly.</p>
+          <p class="text-stone-700 font-bold leading-relaxed text-sm uppercase tracking-wide bg-stone-100 p-5 border border-stone-200 rounded-2xl">📢 Consider this your primary pipeline monitor. Bookmark this hub and visit often to keep tabs on current project status modules, lifecycle milestones, and deployment logs as they drop live.</p>
         </div>
-
       </div>
     </section>
 
     <section id="tab-story" class="content-tab max-w-3xl mx-auto py-4">
-      <div class="mb-12 flex justify-between items-center">
-        <div>
-          <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">The Journey Archive</h2>
-          <p class="text-xs text-stone-500 font-bold uppercase tracking-wider mt-1">Real-time lifecycle updates, structural realizations, and venture deployments</p>
-        </div>
-        <div class="admin-only">
-          <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="rounded border-stone-300 text-stone-900 focus:ring-0"> <span class="text-xs font-bold uppercase text-stone-500">Public Live</span></label>
-        </div>
+      <div class="mb-12">
+        <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">The Journey Archive</h2>
+        <p class="text-xs text-stone-500 font-bold uppercase tracking-wider mt-1">Real-time lifecycle updates, structural realizations, and venture deployments</p>
       </div>
 
       <div class="relative border-l border-stone-200 ml-4 pl-8 space-y-12">
@@ -146,49 +114,42 @@
           <div class="absolute -left-[41px] top-1 bg-stone-900 border-4 border-[#FAFAF9] rounded-full w-5 h-5"></div>
           <span class="text-[10px] font-extrabold text-[#943A3A] uppercase tracking-widest bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-md inline-block mb-3">Venture Log #02</span>
           <div class="bg-white border border-stone-200 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4">
-            <h3 class="text-xl font-black text-stone-900 uppercase tracking-wide">Wachsen Hoch: Engineering the Visibility Matrix</h3>
-            <p class="text-stone-600 text-sm leading-relaxed font-medium">After launching the Akku Custom Furniture ecosystem, I scaling the skill set natively. This gave birth to Wachsen Hoch, a digital growth and performance marketing organization designed to scale absolute market reach.</p>
+            <h3 id="story-title-2" class="editable-field text-xl font-black text-stone-900 uppercase tracking-wide">Wachsen Hoch: Engineering the Visibility Matrix</h3>
+            <p id="story-body-2" class="editable-field text-stone-600 text-sm leading-relaxed font-medium">After launching the Akku Custom Furniture ecosystem, I scaling the skill set natively. This gave birth to Wachsen Hoch, a digital growth and performance marketing organization designed to scale absolute market reach.</p>
           </div>
         </div>
-
         <div class="relative">
           <div class="absolute -left-[41px] top-1 bg-stone-400 border-4 border-[#FAFAF9] rounded-full w-5 h-5"></div>
           <span class="text-[10px] font-extrabold text-stone-400 uppercase tracking-widest bg-stone-100 border px-2.5 py-0.5 rounded-md inline-block mb-3">Venture Log #01</span>
           <div class="bg-white border border-stone-200 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4">
-            <h3 class="text-xl font-black text-stone-800 uppercase tracking-wide">The Sleepless Night: How a Console Table Sparked a Design System</h3>
-            <p class="text-stone-600 text-sm leading-relaxed font-medium">It started on a completely fine day that bled into a restless, sleepless night. That night, I decided to engineer a direct, practical customization pipeline for furniture fabrication.</p>
+            <h3 id="story-title-1" class="editable-field text-xl font-black text-stone-800 uppercase tracking-wide">The Sleepless Night: How a Console Table Sparked a Design System</h3>
+            <p id="story-body-1" class="editable-field text-stone-600 text-sm leading-relaxed font-medium">It started on a completely fine day that bled into a restless, sleepless night. That night, I decided to engineer a direct, practical customization pipeline for furniture fabrication.</p>
           </div>
         </div>
       </div>
     </section>
 
     <section id="tab-books" class="content-tab max-w-3xl mx-auto py-4">
-      <div class="mb-12">
-        <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Manuscripts & Draft Terminal</h2>
-      </div>
+      <div class="mb-12"><h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Manuscripts & Draft Terminal</h2></div>
       <div class="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
-        <h3 class="text-2xl font-black text-stone-900 uppercase tracking-tight">[ Unnamed Project on Emotional Intelligence ]</h3>
-        <p class="text-stone-600 text-sm leading-relaxed font-medium">This book serves as a tactical guide to breaking the irritation loop and handling tough times in a calm, high-utility way based directly on overcoming sleep disruptions, intense shift work stress, and environmental overload.</p>
+        <h3 id="book-title" class="editable-field text-2xl font-black text-stone-900 uppercase tracking-tight">[ Unnamed Project on Emotional Intelligence ]</h3>
+        <p id="book-body" class="editable-field text-stone-600 text-sm leading-relaxed font-medium">This book serves as a tactical guide to breaking the irritation loop and handling tough times in a calm, high-utility way based directly on overcoming sleep disruptions, intense shift work stress, and environmental overload.</p>
       </div>
     </section>
 
     <section id="tab-career" class="content-tab max-w-3xl mx-auto py-4">
-      <div class="mb-12">
-        <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Project Management Terminal</h2>
-      </div>
+      <div class="mb-12"><h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Project Management Terminal</h2></div>
       <div class="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
-        <h3 class="text-2xl font-black text-stone-900 uppercase tracking-tight">PMP Certified Project Manager</h3>
-        <p class="text-stone-600 text-sm leading-relaxed font-medium">An adaptive and flexible strategy focused entirely on scope execution and absolute goal attainment.</p>
+        <h3 id="career-title" class="editable-field text-2xl font-black text-stone-900 uppercase tracking-tight">PMP Certified Project Manager</h3>
+        <p id="career-body" class="editable-field text-stone-600 text-sm leading-relaxed font-medium">An adaptive and flexible strategy focused entirely on scope execution and absolute goal attainment.</p>
       </div>
     </section>
 
     <section id="tab-pipeline" class="content-tab max-w-3xl mx-auto py-4">
-      <div class="mb-12">
-        <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Infolder Concepts & Pipeline</h2>
-      </div>
+      <div class="mb-12"><h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Infolder Concepts & Pipeline</h2></div>
       <div class="grid md:grid-cols-2 gap-6">
-        <div class="bg-white border border-stone-200 p-6 rounded-2xl shadow-sm"><h4 class="font-black uppercase text-stone-900">Custom Designed Automobiles</h4></div>
-        <div class="bg-white border border-stone-200 p-6 rounded-2xl shadow-sm"><h4 class="font-black uppercase text-stone-900">Environmental Waste Clearing NGO</h4></div>
+        <div class="bg-white border border-stone-200 p-6 rounded-2xl shadow-sm"><h4 id="pipe-title-1" class="editable-field font-black uppercase text-stone-900">Custom Designed Automobiles</h4></div>
+        <div class="bg-white border border-stone-200 p-6 rounded-2xl shadow-sm"><h4 id="pipe-title-2" class="editable-field font-black uppercase text-stone-900">Environmental Waste Clearing NGO</h4></div>
       </div>
     </section>
 
@@ -202,9 +163,18 @@
   </footer>
 
   <script>
+    // Initialize Local Storage Caching Framework fallback to allow saving without full database setups
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedFields = ["profile-name", "profile-tag", "intro-headline", "intro-body", "story-title-2", "story-body-2", "story-title-1", "story-body-1", "book-title", "book-body", "career-title", "career-body", "pipe-title-1", "pipe-title-2"];
+      savedFields.forEach(id => {
+        if(localStorage.getItem(id)) {
+          document.getElementById(id).innerText = localStorage.getItem(id);
+        }
+      });
+    });
+
     function toggleAdminPanel() {
-      const modal = document.getElementById('admin-modal');
-      modal.classList.toggle('hidden');
+      document.getElementById('admin-modal').classList.toggle('hidden');
     }
 
     function verifyAdminAccess() {
@@ -212,38 +182,27 @@
       if (input === "akku2026") {
         document.body.classList.add('admin-mode');
         
-        // This explicitly unlocks all text areas on your screen for typing!
-        document.getElementById('profile-name').contentEditable = "true";
-        document.getElementById('profile-tag').contentEditable = "true";
-        document.getElementById('intro-headline').contentEditable = "true";
-        document.getElementById('intro-body').contentEditable = "true";
-        
-        // Adds a visual border highlight so you know exactly what fields you can edit
-        const fields = ['profile-name', 'profile-tag', 'intro-headline', 'intro-body'];
-        fields.forEach(id => {
-          document.getElementById(id).classList.add('ring-2', 'ring-emerald-500', 'p-1', 'rounded-lg', 'bg-emerald-50/30');
+        // Dynamic loop to instantly make EVERY single element editable across all tabs!
+        document.querySelectorAll('.editable-field').forEach(element => {
+          element.contentEditable = "true";
         });
-
+        
         toggleAdminPanel();
-        alert("🔒 Terminal Unlocked. Click directly on any highlighted text to edit it!");
+        alert("🔒 Admin System Active. Move between tabs and click directly on any text block with a dashed green line to customize it on your monitor.");
       } else {
         alert("Access Denied.");
       }
     }
 
-    async function saveProfileChanges() {
-      const nameVal = document.getElementById('profile-name').innerText;
-      const tagVal = document.getElementById('profile-tag').innerText;
+    function executeSaveAction() {
+      const fields = ["profile-name", "profile-tag", "intro-headline", "intro-body", "story-title-2", "story-body-2", "story-title-1", "story-body-1", "book-title", "book-body", "career-title", "career-body", "pipe-title-1", "pipe-title-2"];
       
-      try {
-        await window.setDoc(window.doc(window.db, "portfolioData", "profile"), {
-          name: nameVal,
-          tagline: tagVal
-        });
-        alert("Database Matrix Synchronized Successfully.");
-      } catch (e) {
-        console.error("Sync Error: ", e);
-      }
+      fields.forEach(id => {
+        const text = document.getElementById(id).innerText;
+        localStorage.setItem(id, text);
+      });
+      
+      alert("💾 Changes compiled and cached successfully.");
     }
 
     function switchTab(targetTabId) {
