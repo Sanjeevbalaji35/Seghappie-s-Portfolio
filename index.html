@@ -105,15 +105,18 @@
               Launch Akku Systems ↗
             </a>
             
-            <div id="dynamic-link-wrapper" class="flex flex-wrap items-center gap-3 relative z-30">
-              <a href="https://wachsen-hoch-delta.vercel.app" id="dynamic-agency-anchor" target="_blank" class="border border-[#943A3A] bg-red-50/50 text-[#943A3A] font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:bg-red-50 shadow-sm flex items-center gap-2">
-                Launch <span id="dynamic-link-label">Wachsen Hoch</span> ⚡
+            <div class="flex flex-wrap items-center gap-3 relative z-30">
+              <a href="https://wachsen-hoch.vercel.app" id="dynamic-agency-anchor" target="_blank" class="border border-[#943A3A] bg-red-50/50 text-[#943A3A] font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:bg-red-50 shadow-sm flex items-center gap-2">
+                Launch <span id="dynamic-link-label">WACHSEN HOCH</span> ⚡
               </a>
-              <span id="dynamic-url-input-box" class="editable-field hidden text-[11px] text-stone-700 font-mono font-bold border-2 border-dashed border-emerald-400 px-3 py-3 rounded-xl bg-white min-w-[280px] cursor-text focus:outline-none focus:bg-emerald-50 shadow-sm" style="display: none; min-height: 44px; align-items: center;">https://wachsen-hoch-delta.vercel.app</span>
-              <button onclick="removeProfileLinkElement()" class="hidden admin-action-btn text-[10px] text-red-600 border border-red-200 bg-red-50 px-3 py-2 rounded-xl font-bold uppercase hover:bg-red-100 shadow-sm">🗑️ Remove Link</button>
+              
+              <div id="admin-url-config-box" class="hidden items-center gap-2 border-2 border-dashed border-emerald-400 p-2 rounded-xl bg-white shadow-inner min-w-[340px]">
+                <span class="text-[9px] font-black text-emerald-600 uppercase tracking-wider pl-1">URL:</span>
+                <span id="dynamic-url-input-box" class="editable-field text-[11px] text-stone-700 font-mono font-bold px-2 py-1.5 bg-stone-50 rounded-lg flex-grow cursor-text focus:outline-none focus:bg-emerald-50" style="min-width: 200px; display: inline-block;">https://wachsen-hoch.vercel.app</span>
+                <button onclick="removeProfileLinkElement()" class="text-[9px] text-red-600 border border-red-200 bg-red-50 px-2 py-1.5 rounded-lg font-black uppercase hover:bg-red-100">Remove</button>
+              </div>
             </div>
-            
-            <button onclick="restoreProfileLinkElement()" id="restore-link-btn" class="hidden text-[10px] text-emerald-600 border border-emerald-200 bg-emerald-50 px-3 py-2 rounded-xl font-bold uppercase hover:bg-emerald-100 shadow-sm items-center gap-1">🛠️ Add / Restore Venture Link</button>
+
           </div>
         </div>
       </div>
@@ -178,10 +181,6 @@
     const defaultPipelineData = [{ id: "p1", title: "Custom Designed Automobiles" }, { id: "p2", title: "Environmental Waste Clearing NGO" }];
 
     document.addEventListener("DOMContentLoaded", () => {
-      if (localStorage.getItem("dynamic-venture-url") && localStorage.getItem("dynamic-venture-url").includes("|")) {
-        localStorage.removeItem("dynamic-venture-url");
-      }
-
       if(localStorage.getItem("custom-profile-pic")) {
         document.getElementById("profile-display-img").src = localStorage.getItem("custom-profile-pic");
         document.getElementById('img-placeholder-text').classList.add('hidden');
@@ -192,17 +191,18 @@
         if(localStorage.getItem(id)) document.getElementById(id).innerText = localStorage.getItem(id);
       });
 
+      // Synchronize visibility states on initialization
       if(localStorage.getItem("profile-link-hidden-state") === "true") {
-        document.getElementById("dynamic-link-wrapper").classList.add("hidden");
+        document.getElementById("dynamic-agency-anchor").classList.add("hidden");
       }
 
-      let targetUrl = "https://wachsen-hoch-delta.vercel.app";
+      let savedUrl = "https://wachsen-hoch.vercel.app";
       if(localStorage.getItem("dynamic-venture-url")) {
-        targetUrl = localStorage.getItem("dynamic-venture-url").trim();
+        savedUrl = localStorage.getItem("dynamic-venture-url").trim();
       }
-      document.getElementById("dynamic-agency-anchor").href = targetUrl;
-      document.getElementById("dynamic-url-input-box").innerText = targetUrl;
-      updateDynamicLinkLabel(targetUrl);
+      document.getElementById("dynamic-agency-anchor").href = savedUrl;
+      document.getElementById("dynamic-url-input-box").innerText = savedUrl;
+      updateDynamicLinkLabel(savedUrl);
 
       renderAllDynamicModules();
     });
@@ -316,23 +316,15 @@
       }
     }
 
+    // ─── PERSISTENT CONFIG DECK LINK ACTIONS ───
     function removeProfileLinkElement() {
-      if(confirm("Hide this venture link block from your profile layout?")) {
-        document.getElementById("dynamic-link-wrapper").classList.add("hidden");
-        document.getElementById("dynamic-url-input-box").style.display = "none";
+      if(confirm("Completely wipe out and remove this link block from the public display profile?")) {
+        document.getElementById("dynamic-agency-anchor").classList.add("hidden");
+        document.getElementById("dynamic-url-input-box").innerText = "";
         localStorage.setItem("profile-link-hidden-state", "true");
-        if(document.body.classList.contains("admin-mode")) {
-          document.getElementById("restore-link-btn").classList.remove("hidden");
-          document.getElementById("restore-link-btn").classList.add("inline-flex");
-        }
+        localStorage.setItem("dynamic-venture-url", "");
+        alert("Link removed. Enter any new URL in the green dashed configuration deck to recreate it.");
       }
-    }
-
-    function restoreProfileLinkElement() {
-      document.getElementById("dynamic-link-wrapper").classList.remove("hidden");
-      localStorage.setItem("profile-link-hidden-state", "false");
-      document.getElementById("restore-link-btn").classList.add("hidden");
-      setEditableStates();
     }
 
     function createNewVentureLog() {
@@ -362,12 +354,7 @@
     function setEditableStates() {
       if (document.body.classList.contains("admin-mode")) {
         document.querySelectorAll('.editable-field').forEach(el => el.contentEditable = "true");
-        if(localStorage.getItem("profile-link-hidden-state") !== "true") {
-          document.getElementById("dynamic-url-input-box").style.display = "inline-flex";
-        } else {
-          document.getElementById("restore-link-btn").classList.remove("hidden");
-          document.getElementById("restore-link-btn").classList.add("inline-flex");
-        }
+        document.getElementById("admin-url-config-box").style.display = "inline-flex";
       }
     }
 
@@ -385,7 +372,7 @@
 
     function activateAdminLayout() {
       document.body.classList.add('admin-mode'); setEditableStates();
-      alert("🔒 Terminal Unlocked. Link box field fully interactive.");
+      alert("🔒 Terminal Unlocked. Add/Update Link deck operational.");
     }
 
     function executeSaveAction() {
@@ -393,26 +380,19 @@
       core.forEach(id => localStorage.setItem(id, document.getElementById(id).innerText));
 
       let rawInputUrl = document.getElementById("dynamic-url-input-box").innerText.trim();
-      if(rawInputUrl.includes("|") || rawInputUrl === "") {
-        rawInputUrl = "https://wachsen-hoch-delta.vercel.app";
+      if(rawInputUrl === "") {
+        localStorage.setItem("profile-link-hidden-state", "true");
+        localStorage.setItem("dynamic-venture-url", "");
+      } else {
+        localStorage.setItem("profile-link-hidden-state", "false");
+        localStorage.setItem("dynamic-venture-url", rawInputUrl);
       }
-      localStorage.setItem("dynamic-venture-url", rawInputUrl);
-      document.getElementById("dynamic-agency-anchor").href = rawInputUrl;
-      updateDynamicLinkLabel(rawInputUrl);
 
-      const tData = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : [...defaultTimelineData];
-      tData.forEach(item => {
-        if(document.getElementById(`t-title-${item.id}`)) item.title = document.getElementById(`t-title-${item.id}`).innerText;
-        if(document.getElementById(`t-body-${item.id}`)) item.body = document.getElementById(`t-body-${item.id}`).innerText;
-      });
-      localStorage.setItem("timeline-logs-list", JSON.stringify(tData));
-
-      document.getElementById("dynamic-url-input-box").style.display = "none";
-      document.getElementById("restore-link-btn").classList.add("hidden");
+      document.getElementById("admin-url-config-box").style.display = "none";
       document.body.classList.remove('admin-mode');
       document.querySelectorAll('.editable-field').forEach(el => el.contentEditable = "false");
 
-      alert("💾 Changes synced successfully.");
+      alert("💾 Changes saved successfully.");
       window.location.reload(); 
     }
 
