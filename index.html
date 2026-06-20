@@ -105,15 +105,15 @@
               Launch Akku Systems ↗
             </a>
             
-            <div id="dynamic-link-wrapper" class="flex flex-wrap items-center gap-2">
+            <div id="dynamic-link-wrapper" class="flex flex-wrap items-center gap-3 relative z-30">
               <a href="https://wachsen-hoch-delta.vercel.app" id="dynamic-agency-anchor" target="_blank" class="border border-[#943A3A] bg-red-50/50 text-[#943A3A] font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all hover:bg-red-50 shadow-sm flex items-center gap-2">
                 Launch <span id="dynamic-link-label">Wachsen Hoch</span> ⚡
               </a>
-              <span id="dynamic-url-input-box" class="editable-field hidden text-[10px] text-stone-400 font-mono font-bold border border-dashed border-stone-300 px-2 py-3 rounded-xl bg-stone-50">https://wachsen-hoch-delta.vercel.app</span>
-              <button onclick="removeProfileLinkElement()" class="hidden admin-action-btn text-[10px] text-red-600 border border-red-200 bg-red-50 px-2 py-2 rounded-xl font-bold uppercase hover:bg-red-100 shadow-sm">🗑️ Remove Link</button>
+              <span id="dynamic-url-input-box" class="editable-field hidden text-[11px] text-stone-700 font-mono font-bold border-2 border-dashed border-emerald-400 px-3 py-3 rounded-xl bg-white min-w-[280px] cursor-text focus:outline-none focus:bg-emerald-50 shadow-sm" style="display: none; min-height: 44px; align-items: center;">https://wachsen-hoch-delta.vercel.app</span>
+              <button onclick="removeProfileLinkElement()" class="hidden admin-action-btn text-[10px] text-red-600 border border-red-200 bg-red-50 px-3 py-2 rounded-xl font-bold uppercase hover:bg-red-100 shadow-sm">🗑️ Remove Link</button>
             </div>
             
-            <button onclick="restoreProfileLinkElement()" id="restore-link-btn" class="hidden text-[10px] text-emerald-600 border border-emerald-200 bg-emerald-50 px-3 py-2 rounded-xl font-bold uppercase hover:bg-emerald-100 shadow-sm items-center gap-1">🛠️ Restore Venture Link</button>
+            <button onclick="restoreProfileLinkElement()" id="restore-link-btn" class="hidden text-[10px] text-emerald-600 border border-emerald-200 bg-emerald-50 px-3 py-2 rounded-xl font-bold uppercase hover:bg-emerald-100 shadow-sm items-center gap-1">🛠️ Add / Restore Venture Link</button>
           </div>
         </div>
       </div>
@@ -178,7 +178,6 @@
     const defaultPipelineData = [{ id: "p1", title: "Custom Designed Automobiles" }, { id: "p2", title: "Environmental Waste Clearing NGO" }];
 
     document.addEventListener("DOMContentLoaded", () => {
-      // Automatic cache reset engine to flush structural line freezes instantly on refresh
       if (localStorage.getItem("dynamic-venture-url") && localStorage.getItem("dynamic-venture-url").includes("|")) {
         localStorage.removeItem("dynamic-venture-url");
       }
@@ -320,6 +319,7 @@
     function removeProfileLinkElement() {
       if(confirm("Hide this venture link block from your profile layout?")) {
         document.getElementById("dynamic-link-wrapper").classList.add("hidden");
+        document.getElementById("dynamic-url-input-box").style.display = "none";
         localStorage.setItem("profile-link-hidden-state", "true");
         if(document.body.classList.contains("admin-mode")) {
           document.getElementById("restore-link-btn").classList.remove("hidden");
@@ -363,7 +363,7 @@
       if (document.body.classList.contains("admin-mode")) {
         document.querySelectorAll('.editable-field').forEach(el => el.contentEditable = "true");
         if(localStorage.getItem("profile-link-hidden-state") !== "true") {
-          document.getElementById("dynamic-url-input-box").classList.remove("hidden");
+          document.getElementById("dynamic-url-input-box").style.display = "inline-flex";
         } else {
           document.getElementById("restore-link-btn").classList.remove("hidden");
           document.getElementById("restore-link-btn").classList.add("inline-flex");
@@ -385,7 +385,7 @@
 
     function activateAdminLayout() {
       document.body.classList.add('admin-mode'); setEditableStates();
-      alert("🔒 Terminal Unlocked. Fields are now editable.");
+      alert("🔒 Terminal Unlocked. Link box field fully interactive.");
     }
 
     function executeSaveAction() {
@@ -407,12 +407,12 @@
       });
       localStorage.setItem("timeline-logs-list", JSON.stringify(tData));
 
-      document.getElementById("dynamic-url-input-box").classList.add("hidden");
+      document.getElementById("dynamic-url-input-box").style.display = "none";
       document.getElementById("restore-link-btn").classList.add("hidden");
       document.body.classList.remove('admin-mode');
       document.querySelectorAll('.editable-field').forEach(el => el.contentEditable = "false");
 
-      alert("💾 Layout compiled and saved.");
+      alert("💾 Changes synced successfully.");
       window.location.reload(); 
     }
 
