@@ -4,428 +4,107 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sanjeev Balaji | Ideas, Works & Venture Space</title>
-  
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            stoneCharcoal: '#1C1917',
-            stoneAlabaster: '#FAFAF9',
-            brandCrimson: '#943A3A',
-          }
-        }
-      }
-    }
-  </script>
-
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
     .content-tab { display: none; }
     .content-tab.active { display: block; }
-    
-    /* Edit Highlighting Mode Styles */
-    body.admin-mode .editable-field {
-      outline: 2px dashed #10B981 !important;
-      background-color: rgba(240, 253, 250, 0.5);
-      padding: 4px;
-      border-radius: 8px;
-      cursor: text;
-    }
+    body.admin-mode .editable-field { outline: 2px dashed #10B981 !important; background-color: rgba(240, 253, 250, 0.5); padding: 4px; border-radius: 8px; cursor: text; }
     .save-indicator { display: none; }
     body.admin-mode .save-indicator { display: block; }
     body.admin-mode .admin-action-btn { display: inline-flex !important; }
   </style>
 </head>
-<body class="bg-[#FAFAF9] text-[#1C1917] min-h-screen flex flex-col justify-between selection:bg-stone-200">
+<body class="bg-[#FAFAF9] text-[#1C1917] min-h-screen">
 
-  <nav class="bg-[#FAFAF9]/90 backdrop-blur-md border-b border-stone-200 sticky top-0 z-50">
-    <div class="max-w-5xl mx-auto px-6 flex justify-between items-center h-20">
-      <div>
-        <span class="text-xs font-black tracking-widest text-stone-400 uppercase">SYS // CONTROL</span>
-      </div>
-      
-      <div class="flex flex-wrap items-center gap-1 justify-end py-2">
-        <button onclick="switchTab('bio')" id="tab-btn-bio" class="portfolio-nav-btn px-3 py-2 rounded-xl font-bold text-xs uppercase tracking-wider text-stone-900 bg-stone-200/60">Profile</button>
-        <button onclick="switchTab('story')" id="tab-btn-story" class="portfolio-nav-btn px-3 py-2 rounded-xl font-bold text-xs uppercase tracking-wider text-stone-600 hover:bg-stone-100">Live Story</button>
-        <button onclick="switchTab('books')" id="tab-btn-books" class="portfolio-nav-btn px-3 py-2 rounded-xl font-bold text-xs uppercase tracking-wider text-stone-600 hover:bg-stone-100">Book Room</button>
-        <button onclick="switchTab('career')" id="tab-btn-career" class="portfolio-nav-btn px-3 py-2 rounded-xl font-bold text-xs uppercase tracking-wider text-stone-600 hover:bg-stone-100">Career Log</button>
-        <button onclick="switchTab('pipeline')" id="tab-btn-pipeline" class="portfolio-nav-btn px-3 py-2 rounded-xl font-bold text-xs uppercase tracking-wider text-stone-600 hover:bg-stone-100">Pipeline</button>
-      </div>
-    </div>
-  </nav>
-
-  <div class="save-indicator bg-emerald-600 text-white py-3 px-6 text-center sticky top-20 z-40 border-b border-emerald-700 shadow-md">
-    <div class="max-w-5xl mx-auto flex justify-between items-center">
-      <span class="text-xs font-bold uppercase tracking-wider">🛠️ Editing Terminal Active — Changes live in browser layout</span>
-      <button onclick="executeSaveAction()" class="bg-white text-emerald-700 font-extrabold text-[10px] uppercase tracking-widest px-4 py-2 rounded-lg hover:bg-stone-50 shadow transition-all">Save Matrix Changes</button>
+  <div class="save-indicator bg-emerald-600 text-white py-3 px-6 text-center sticky top-0 z-50 shadow-md">
+    <div class="max-w-3xl mx-auto flex justify-between items-center">
+      <span class="text-[10px] font-bold uppercase tracking-wider">🛠️ Editing Terminal Active</span>
+      <button onclick="executeSaveAction()" class="bg-white text-emerald-700 font-extrabold text-[10px] uppercase tracking-widest px-4 py-2 rounded-lg hover:bg-stone-50">Save Changes</button>
     </div>
   </div>
 
-  <main class="flex-grow max-w-5xl mx-auto w-full px-6 py-12">
-    
-    <section id="tab-bio" class="content-tab active space-y-16">
-      <div class="grid md:grid-cols-3 gap-12 items-stretch">
-        
-        <div class="bg-white border border-stone-200 rounded-3xl p-6 flex flex-col justify-between shadow-sm md:col-span-1 min-h-[520px]">
-          <div class="space-y-6 flex-grow flex flex-col justify-center">
-            
-            <div class="w-full aspect-[4/5] bg-stone-50 rounded-2xl overflow-hidden border border-stone-200 shadow-inner flex flex-col items-center justify-center relative group">
-              <img id="profile-display-img" src="profile.jpeg.jpeg" alt="Sanjeev Balaji" class="w-full h-full object-cover" onerror="this.src='profile.jpeg'; this.onerror=function(){this.src='profile.png'; this.onerror=function(){if(localStorage.getItem('custom-profile-pic')){this.src=localStorage.getItem('custom-profile-pic');}else{this.style.display='none'; document.getElementById('img-placeholder-text').classList.remove('hidden');}}}}">
-              <div id="img-placeholder-text" class="hidden text-stone-400 text-xs font-bold uppercase tracking-wider">Photo Frame Active</div>
-              
-              <label class="hidden admin-action-btn absolute bottom-3 left-3 right-3 bg-stone-900/80 hover:bg-stone-900 text-white text-[10px] font-bold uppercase tracking-wider py-2 px-3 rounded-xl justify-center items-center gap-1 cursor-pointer transition-all backdrop-blur-sm shadow">
-                📸 Select Profile Photo
-                <input type="file" id="profile-file-picker" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
-              </label>
-            </div>
-            
-            <div class="text-center space-y-2">
-              <h3 id="profile-name" class="editable-field font-black text-stone-900 uppercase tracking-wide text-2xl">Sanjeev Balaji</h3>
-              <div>
-                <p id="profile-tag" class="editable-field text-xs font-extrabold text-[#943A3A] uppercase tracking-widest bg-red-50 border border-red-100 px-4 py-1.5 rounded-full inline-block">Very Good Human</p>
-              </div>
-            </div>
-          </div>
-        </div>
+  <nav class="max-w-3xl mx-auto px-6 py-12 flex justify-between items-center">
+    <span class="text-[10px] font-black tracking-[0.2em] text-stone-400 uppercase">SYS // CONTROL</span>
+    <div class="flex gap-1">
+      <button onclick="switchTab('bio')" id="tab-btn-bio" class="portfolio-nav-btn px-3 py-1 rounded-lg font-bold text-[10px] uppercase tracking-widest text-stone-900 bg-stone-200/50">Profile</button>
+      <button onclick="switchTab('story')" id="tab-btn-story" class="portfolio-nav-btn px-3 py-1 rounded-lg font-bold text-[10px] uppercase tracking-widest text-stone-500 hover:text-stone-900">Story</button>
+      <button onclick="switchTab('books')" id="tab-btn-books" class="portfolio-nav-btn px-3 py-1 rounded-lg font-bold text-[10px] uppercase tracking-widest text-stone-500 hover:text-stone-900">Books</button>
+      <button onclick="switchTab('career')" id="tab-btn-career" class="portfolio-nav-btn px-3 py-1 rounded-lg font-bold text-[10px] uppercase tracking-widest text-stone-500 hover:text-stone-900">Career</button>
+    </div>
+  </nav>
 
-        <div class="md:col-span-2 flex flex-col justify-center space-y-6">
-          <span class="text-xs font-bold uppercase tracking-widest text-stone-500 bg-stone-100 border border-stone-200 px-3 py-1 rounded-full inline-block">The Master Dashboard</span>
-          <h1 id="intro-headline" class="editable-field text-4xl sm:text-5xl font-extrabold tracking-tight text-stone-900 uppercase leading-tight">Ideas. Works. <br/>Career. Blogs.</h1>
-          <p id="intro-body" class="editable-field text-stone-600 font-medium leading-relaxed text-base sm:text-lg">This is the definitive portfolio of my personal blueprints, high-level career concepts, and active live blogs. From mechanical engineering principles to launching hyper-custom industrial spaces like Akku Hybrid Systems, I don't just draft concepts—I construct them flawlessly.</p>
-          <p class="text-stone-700 font-bold leading-relaxed text-sm uppercase tracking-wide bg-stone-100 p-5 border border-stone-200 rounded-2xl">📢 Consider this your primary pipeline monitor. Bookmark this hub and visit often to keep tabs on current project status modules, lifecycle milestones, and deployment logs as they drop live.</p>
-          
-          <div class="space-y-4 pt-2">
-            <div class="flex justify-between items-center">
-              <span class="text-[10px] font-black tracking-widest text-stone-400 uppercase">Deployed Links & Asset Channels</span>
-              <button onclick="createNewProfileLinkCard()" class="hidden admin-action-btn bg-stone-950 text-white font-extrabold text-[10px] uppercase tracking-wider px-4 py-2 rounded-xl hover:bg-stone-800 items-center gap-1.5 shadow">＋ Add Link Card</button>
-            </div>
-            <div id="profile-links-container" class="flex flex-wrap gap-3 items-center">
-              </div>
-          </div>
-
-        </div>
-      </div>
+  <main class="max-w-3xl mx-auto px-6 pb-20">
+    <section id="tab-bio" class="content-tab active space-y-12">
+      <h1 id="intro-headline" class="editable-field text-5xl font-black tracking-tight text-stone-900 uppercase">Ideas. Works. <br/>Career. Blogs.</h1>
+      <div id="profile-links-container" class="flex flex-wrap gap-3"></div>
+      <button onclick="createNewProfileLinkCard()" class="hidden admin-action-btn bg-stone-900 text-white text-[10px] font-black px-4 py-2 rounded-lg uppercase tracking-wider">＋ Add Link</button>
     </section>
 
-    <section id="tab-story" class="content-tab max-w-3xl mx-auto py-4">
-      <div class="mb-12 flex justify-between items-center flex-wrap gap-4">
-        <div>
-          <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">The Journey Archive</h2>
-          <p class="text-xs text-stone-500 font-bold uppercase tracking-wider mt-1">Real-time lifecycle updates, structural realizations, and venture deployments</p>
-        </div>
-        <button onclick="createNewVentureLog()" class="hidden admin-action-btn bg-stone-900 text-white font-extrabold text-[10px] uppercase tracking-wider px-4 py-2.5 rounded-xl hover:bg-stone-800 items-center gap-1.5 shadow">＋ Add Venture Log</button>
+    <section id="tab-story" class="content-tab space-y-12">
+      <div class="flex justify-between items-center">
+        <h2 class="text-xl font-black uppercase">Journey Archive</h2>
+        <button onclick="createNewVentureLog()" class="hidden admin-action-btn bg-stone-900 text-white text-[10px] px-3 py-1 rounded-lg">＋ Add Log</button>
       </div>
-      <div id="timeline-stack" class="relative border-l border-stone-200 ml-4 pl-8 space-y-12"></div>
+      <div id="timeline-stack" class="space-y-8"></div>
     </section>
 
-    <section id="tab-books" class="content-tab max-w-3xl mx-auto py-4">
-      <div class="mb-12 flex justify-between items-center flex-wrap gap-4">
-        <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Manuscripts & Draft Terminal</h2>
-        <button onclick="createNewBookLog()" class="hidden admin-action-btn bg-stone-900 text-white font-extrabold text-[10px] uppercase tracking-wider px-4 py-2.5 rounded-xl hover:bg-stone-800 items-center gap-1.5 shadow">＋ Add Book Draft</button>
-      </div>
+    <section id="tab-books" class="content-tab space-y-12">
+      <h2 class="text-xl font-black uppercase">Manuscripts</h2>
       <div id="book-stack" class="space-y-6"></div>
     </section>
 
-    <section id="tab-career" class="content-tab max-w-3xl mx-auto py-4">
-      <div class="mb-12 flex justify-between items-center flex-wrap gap-4">
-        <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Project Management Terminal</h2>
-        <button onclick="createNewCareerLog()" class="hidden admin-action-btn bg-stone-900 text-white font-extrabold text-[10px] uppercase tracking-wider px-4 py-2.5 rounded-xl hover:bg-stone-800 items-center gap-1.5 shadow">＋ Add Career Log</button>
-      </div>
+    <section id="tab-career" class="content-tab space-y-12">
+      <h2 class="text-xl font-black uppercase">Career Log</h2>
       <div id="career-stack" class="space-y-6"></div>
     </section>
-
-    <section id="tab-pipeline" class="content-tab max-w-3xl mx-auto py-4">
-      <div class="mb-12 flex justify-between items-center flex-wrap gap-4">
-        <h2 class="text-2xl font-black uppercase tracking-tight text-stone-900">Infolder Concepts & Pipeline</h2>
-        <button onclick="createNewPipelineLog()" class="hidden admin-action-btn bg-stone-900 text-white font-extrabold text-[10px] uppercase tracking-wider px-4 py-2.5 rounded-xl hover:bg-stone-800 items-center gap-1.5 shadow">＋ Add Pipeline Idea</button>
-      </div>
-      <div id="pipeline-grid" class="grid md:grid-cols-2 gap-6"></div>
-    </section>
-
   </main>
 
-  <footer class="bg-stone-100 text-stone-600 py-10 text-center border-t border-stone-200 space-y-6">
-    <div class="max-w-xs mx-auto px-4 flex gap-2 items-center justify-center bg-white p-3 border border-stone-200 rounded-xl shadow-sm">
-      <input type="password" id="inline-pass-field" placeholder="Terminal Override" class="px-3 py-1.5 bg-stone-50 border border-stone-200 rounded-lg text-xs w-full focus:outline-none focus:border-stone-900">
-      <button onclick="executeInlineOverride()" class="bg-stone-950 text-white text-[10px] font-black uppercase px-3 py-2 rounded-lg tracking-wider whitespace-nowrap">Unlock</button>
-    </div>
-    <div class="max-w-5xl mx-auto px-6 flex flex-col items-center gap-3">
-      <span class="font-black tracking-tight text-stone-900 uppercase text-sm">Sanjeev Balaji Portfolio</span>
-      <p class="text-xs text-stone-500 font-medium">© 2026 Selvaraj Sanjeev Balaji.</p>
-    </div>
+  <footer class="max-w-3xl mx-auto px-6 py-12 border-t border-stone-200">
+    <input type="password" id="inline-pass-field" placeholder="Terminal Override" class="px-3 py-2 bg-stone-100 border border-stone-200 rounded-lg text-[10px] w-32">
+    <button onclick="executeInlineOverride()" class="bg-stone-900 text-white text-[10px] px-3 py-2 rounded-lg font-black uppercase">Unlock</button>
   </footer>
 
   <script>
-    const defaultTimelineData = [
-      { id: "log-2", marker: "Venture Log #02", title: "Wachsen Hoch: Performance Venture & Visibility Optimization", body: "A flexible B2B growth consulting architecture engineered to transition projects, creative books, manufacturers, or service models online. We build e-commerce structures, run targeted marketing campaigns, structure operational PMO lines, and orchestrate cross-border corporate setup routes into Dubai." },
-      { id: "log-1", marker: "Venture Log #01", title: "The Sleepless Night: How a Console Table Sparked a Design System", body: "It started on a completely fine day that bled into a restless, sleepless night. That night, I decided to engineer a direct, practical customization pipeline for furniture fabrication." }
-    ];
-
-    const defaultBookData = [{ id: "b1", title: "[ Unnamed Project on Emotional Intelligence ]", body: "This book serves as a tactical guide to breaking the irritation loop based directly on overcoming sleep disruptions and intense environmental stress." }];
-    const defaultCareerData = [{ id: "c1", title: "PMP Certified Project Manager", body: "An adaptive strategy focused entirely on scope execution and absolute goal attainment." }];
-    const defaultPipelineData = [{ id: "p1", title: "Custom Designed Automobiles" }, { id: "p2", title: "Environmental Waste Clearing NGO" }];
-
-    // Clean Default Profile External Asset Routes Payload Matrix
-    const defaultProfileLinks = [
-      { id: "lnk-1", label: "LAUNCH AKKU SYSTEMS", url: "https://akkucustomfurniture.vercel.app/" },
-      { id: "lnk-2", label: "LAUNCH WACHSEN HOCH", url: "https://wachsen-hoch.vercel.app" }
-    ];
-
-    document.addEventListener("DOMContentLoaded", () => {
-      if(localStorage.getItem("custom-profile-pic")) {
-        document.getElementById("profile-display-img").src = localStorage.getItem("custom-profile-pic");
-        document.getElementById('img-placeholder-text').classList.add('hidden');
-      }
-
-      const fields = ["profile-name", "profile-tag", "intro-headline", "intro-body"];
-      fields.forEach(id => {
-        if(localStorage.getItem(id)) document.getElementById(id).innerText = localStorage.getItem(id);
-      });
-
-      renderAllDynamicModules();
-    });
-
-    function renderAllDynamicModules() {
-      renderProfileLinkStack();
-      renderTimelineList();
-      renderBookList();
-      renderCareerList();
-      renderPipelineGrid();
+    // Data Setup
+    const defaultProfileLinks = [{ id: "lnk-1", label: "AKKU SYSTEMS", url: "https://akkucustomfurniture.vercel.app/" }];
+    const defaultTimelineData = [{ id: "log-1", marker: "Log #01", title: "Venture Started", body: "Initial deployment." }];
+    
+    function switchTab(target) {
+      document.querySelectorAll('.content-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-' + target).classList.add('active');
     }
 
-    // ─── DYNAMIC PROFILE LINK ARCHITECTURE RENDER ENGINE ───
     function renderProfileLinkStack() {
       const container = document.getElementById("profile-links-container"); container.innerHTML = "";
       const data = localStorage.getItem("profile-links-matrix-list") ? JSON.parse(localStorage.getItem("profile-links-matrix-list")) : defaultProfileLinks;
-      
       data.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "flex items-center gap-2 bg-white border border-stone-200 p-2 rounded-2xl shadow-sm border-l-4 border-l-[#943A3A]";
-        div.innerHTML = `
-          <a href="${item.url}" id="l-anchor-${item.id}" target="_blank" class="text-stone-900 font-bold text-xs uppercase tracking-wider px-3 py-1.5 hover:text-[#943A3A] transition-all flex items-center gap-1.5">
-            <span id="l-text-${item.id}" class="editable-field">${item.label}</span> ↗
-          </a>
-          <div id="l-config-deck-${item.id}" class="hidden items-center gap-1.5 bg-stone-50 p-1 rounded-xl border border-dashed border-stone-300">
-            <span class="text-[9px] font-mono font-bold text-stone-400 pl-1">URL:</span>
-            <span id="l-url-${item.id}" class="editable-field text-[10px] font-mono font-bold text-stone-600 bg-white px-2 py-1 rounded-md cursor-text focus:outline-none" style="min-width:160px; display:inline-block;">${item.url}</span>
-            <button onclick="deleteProfileLinkCard('${item.id}')" class="text-[9px] text-red-600 font-black uppercase bg-red-50 border border-red-200 px-2 py-1 rounded-md hover:bg-red-100">Delete</button>
-          </div>
-        `;
-        container.appendChild(div);
+        const a = document.createElement("a");
+        a.href = item.url; a.className = "text-stone-900 font-bold text-xs uppercase border border-stone-200 px-4 py-2 rounded-xl hover:bg-stone-100";
+        a.innerText = item.label; container.appendChild(a);
       });
-      setEditableStates();
-    }
-
-    function createNewProfileLinkCard() {
-      const list = localStorage.getItem("profile-links-matrix-list") ? JSON.parse(localStorage.getItem("profile-links-matrix-list")) : [...defaultProfileLinks];
-      list.push({ id: "lnk-" + Date.now(), label: "NEW BLUEPRINT LINK", url: "https://example.com" });
-      localStorage.setItem("profile-links-matrix-list", JSON.stringify(list));
-      renderProfileLinkStack();
-    }
-
-    function deleteProfileLinkCard(targetId) {
-      if(confirm("Permanently erase this asset routing link node from the grid?")) {
-        let list = localStorage.getItem("profile-links-matrix-list") ? JSON.parse(localStorage.getItem("profile-links-matrix-list")) : [...defaultProfileLinks];
-        list = list.filter(item => item.id !== targetId);
-        localStorage.setItem("profile-links-matrix-list", JSON.stringify(list));
-        renderProfileLinkStack();
-      }
-    }
-
-    // ─── DYNAMIC CORE LAYOUT CARD MODULES ───
-    function renderTimelineList() {
-      const container = document.getElementById("timeline-stack"); container.innerHTML = "";
-      const data = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : defaultTimelineData;
-      data.forEach(item => {
-        const block = document.createElement("div"); block.className = "relative group";
-        block.innerHTML = `
-          <div class="absolute -left-[41px] top-1 bg-stone-900 border-4 border-[#FAFAF9] rounded-full w-5 h-5"></div>
-          <div class="flex justify-between items-center mb-3">
-            <span class="text-[10px] font-extrabold text-[#943A3A] uppercase tracking-widest bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-md inline-block">${item.marker}</span>
-            <button onclick="deleteModuleItem('timeline-logs-list', '${item.id}')" class="hidden admin-action-btn text-[10px] text-red-600 border border-red-200 bg-red-50 px-2 py-0.5 rounded-md font-bold uppercase hover:bg-red-100">🗑️ Delete</button>
-          </div>
-          <div class="bg-white border border-stone-200 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4">
-            <h3 id="t-title-${item.id}" class="editable-field text-xl font-black text-stone-900 uppercase tracking-wide">${item.title}</h3>
-            <p id="t-body-${item.id}" class="editable-field text-stone-600 text-sm leading-relaxed font-medium">${item.body}</p>
-          </div>`;
-        container.appendChild(block);
-      });
-      setEditableStates();
-    }
-
-    function renderBookList() {
-      const container = document.getElementById("book-stack"); container.innerHTML = "";
-      const data = localStorage.getItem("book-logs-list") ? JSON.parse(localStorage.getItem("book-logs-list")) : defaultBookData;
-      data.forEach(item => {
-        const div = document.createElement("div"); div.className = "bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4 relative";
-        div.innerHTML = `
-          <div class="flex justify-end admin-only absolute top-4 right-4">
-            <button onclick="deleteModuleItem('book-logs-list', '${item.id}')" class="hidden admin-action-btn text-[10px] text-red-600 border border-red-200 bg-red-50 px-2 py-0.5 rounded-md font-bold uppercase hover:bg-red-100">🗑️ Delete</button>
-          </div>
-          <h3 id="b-title-${item.id}" class="editable-field text-2xl font-black text-stone-900 uppercase tracking-tight pr-16">${item.title}</h3>
-          <p id="b-body-${item.id}" class="editable-field text-stone-600 text-sm leading-relaxed font-medium">${item.body}</p>`;
-        container.appendChild(div);
-      });
-      setEditableStates();
-    }
-
-    function renderCareerList() {
-      const container = document.getElementById("career-stack"); container.innerHTML = "";
-      const data = localStorage.getItem("career-logs-list") ? JSON.parse(localStorage.getItem("career-logs-list")) : defaultCareerData;
-      data.forEach(item => {
-        const div = document.createElement("div"); div.className = "bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4 relative";
-        div.innerHTML = `
-          <div class="flex justify-end admin-only absolute top-4 right-4">
-            <button onclick="deleteModuleItem('career-logs-list', '${item.id}')" class="hidden admin-action-btn text-[10px] text-red-600 border border-red-200 bg-red-50 px-2 py-0.5 rounded-md font-bold uppercase hover:bg-red-100">🗑️ Delete</button>
-          </div>
-          <h3 id="c-title-${item.id}" class="editable-field text-2xl font-black text-stone-900 uppercase tracking-tight pr-16">${item.title}</h3>
-          <p id="c-body-${item.id}" class="editable-field text-stone-600 text-sm leading-relaxed font-medium">${item.body}</p>`;
-        container.appendChild(div);
-      });
-      setEditableStates();
-    }
-
-    function renderPipelineGrid() {
-      const container = document.getElementById("pipeline-grid"); container.innerHTML = "";
-      const data = localStorage.getItem("pipeline-logs-list") ? JSON.parse(localStorage.getItem("pipeline-logs-list")) : defaultPipelineData;
-      data.forEach(item => {
-        const div = document.createElement("div"); div.className = "bg-white border border-stone-200 p-6 rounded-2xl shadow-sm flex justify-between items-center gap-4";
-        div.innerHTML = `
-          <h4 id="p-title-${item.id}" class="editable-field font-black uppercase text-stone-900 flex-grow">${item.title}</h4>
-          <button onclick="deleteModuleItem('pipeline-logs-list', '${item.id}')" class="hidden admin-action-btn text-[10px] text-red-600 border border-red-200 bg-red-50 px-2 py-0.5 rounded-md font-bold uppercase hover:bg-red-100 whitespace-nowrap">🗑️ Delete</button>`;
-        container.appendChild(div);
-      });
-      setEditableStates();
-    }
-
-    function deleteModuleItem(storageKey, targetId) {
-      if(confirm("Are you sure you want to permanently erase this parameter?")) {
-        let activeDefaults = storageKey === 'timeline-logs-list' ? defaultTimelineData 
-                           : storageKey === 'book-logs-list' ? defaultBookData 
-                           : storageKey === 'career-logs-list' ? defaultCareerData 
-                           : defaultPipelineData;
-        let list = localStorage.getItem(storageKey) ? JSON.parse(localStorage.getItem(storageKey)) : [...activeDefaults];
-        list = list.filter(item => item.id !== targetId);
-        localStorage.setItem(storageKey, JSON.stringify(list));
-        renderAllDynamicModules();
-      }
-    }
-
-    function createNewVentureLog() {
-      const list = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : [...defaultTimelineData];
-      list.unshift({ id: "tl-" + Date.now(), marker: `Venture Log #0${list.length + 1}`, title: "NEW DYNAMIC VENTURE", body: "Click here to summarize project mechanics." });
-      localStorage.setItem("timeline-logs-list", JSON.stringify(list)); renderTimelineList();
-    }
-
-    function createNewBookLog() {
-      const list = localStorage.getItem("book-logs-list") ? JSON.parse(localStorage.getItem("book-logs-list")) : [...defaultBookData];
-      list.unshift({ id: "bk-" + Date.now(), title: "[ NEW MANUSCRIPT ]", body: "Click here to draft framework strategies." });
-      localStorage.setItem("book-logs-list", JSON.stringify(list)); renderBookList();
-    }
-
-    function createNewCareerLog() {
-      const list = localStorage.getItem("career-logs-list") ? JSON.parse(localStorage.getItem("career-logs-list")) : [...defaultCareerData];
-      list.unshift({ id: "cr-" + Date.now(), title: "NEW LOGISTICAL TARGET", body: "Click here to detail objective project parameters." });
-      localStorage.setItem("career-logs-list", JSON.stringify(list)); renderCareerList();
-    }
-
-    function createNewPipelineLog() {
-      const list = localStorage.getItem("pipeline-logs-list") ? JSON.parse(localStorage.getItem("pipeline-logs-list")) : [...defaultPipelineData];
-      list.unshift({ id: "pl-" + Date.now(), title: "NEW PIPELINE CONCEPT" });
-      localStorage.setItem("pipeline-logs-list", JSON.stringify(list)); renderPipelineGrid();
-    }
-
-    function handleImageUpload(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const base64Img = e.target.result;
-          document.getElementById("profile-display-img").src = base64Img;
-          document.getElementById('img-placeholder-text').classList.add('hidden');
-          localStorage.setItem("custom-profile-pic", base64Img);
-        }
-        reader.readAsDataURL(file);
-      }
-    }
-
-    function setEditableStates() {
-      if (document.body.classList.contains("admin-mode")) {
-        document.querySelectorAll('.editable-field').forEach(el => el.contentEditable = "true");
-        const data = localStorage.getItem("profile-links-matrix-list") ? JSON.parse(localStorage.getItem("profile-links-matrix-list")) : defaultProfileLinks;
-        data.forEach(item => {
-          if(document.getElementById(`l-config-deck-${item.id}`)) {
-            document.getElementById(`l-config-deck-${item.id}`).style.display = "inline-flex";
-          }
-        });
-      }
     }
 
     function executeInlineOverride() {
       if(document.getElementById("inline-pass-field").value === "akku2026") {
-        document.body.classList.add('admin-mode'); setEditableStates();
-        document.getElementById("inline-pass-field").value = "";
-        alert("🔒 Terminal Override Enabled. Multi-link deck operational.");
-      } else { alert("Invalid Override Token."); }
+        document.body.classList.add('admin-mode');
+        document.querySelectorAll('.editable-field').forEach(el => el.contentEditable = "true");
+      }
     }
 
     function executeSaveAction() {
-      const core = ["profile-name", "profile-tag", "intro-headline", "intro-body"];
-      core.forEach(id => localStorage.setItem(id, document.getElementById(id).innerText));
-
-      // Serialize Multi-Link Grid Changes Securely
-      const lData = localStorage.getItem("profile-links-matrix-list") ? JSON.parse(localStorage.getItem("profile-links-matrix-list")) : [...defaultProfileLinks];
-      lData.forEach(item => {
-        if(document.getElementById(`l-text-${item.id}`)) item.label = document.getElementById(`l-text-${item.id}`).innerText.trim();
-        if(document.getElementById(`l-url-${item.id}`)) item.url = document.getElementById(`l-url-${item.id}`).innerText.trim();
-      });
-      localStorage.setItem("profile-links-matrix-list", JSON.stringify(lData));
-
-      // Serialize dynamic module text data
-      const tData = localStorage.getItem("timeline-logs-list") ? JSON.parse(localStorage.getItem("timeline-logs-list")) : [...defaultTimelineData];
-      tData.forEach(item => {
-        if(document.getElementById(`t-title-${item.id}`)) item.title = document.getElementById(`t-title-${item.id}`).innerText;
-        if(document.getElementById(`t-body-${item.id}`)) item.body = document.getElementById(`t-body-${item.id}`).innerText;
-      });
-      localStorage.setItem("timeline-logs-list", JSON.stringify(tData));
-
-      const bData = localStorage.getItem("book-logs-list") ? JSON.parse(localStorage.getItem("book-logs-list")) : [...defaultBookData];
-      bData.forEach(item => {
-        if(document.getElementById(`b-title-${item.id}`)) item.title = document.getElementById(`b-title-${item.id}`).innerText;
-        if(document.getElementById(`b-body-${item.id}`)) item.body = document.getElementById(`b-body-${item.id}`).innerText;
-      });
-      localStorage.setItem("book-logs-list", JSON.stringify(bData));
-
-      const cData = localStorage.getItem("career-logs-list") ? JSON.parse(localStorage.getItem("career-logs-list")) : [...defaultCareerData];
-      cData.forEach(item => {
-        if(document.getElementById(`c-title-${item.id}`)) item.title = document.getElementById(`c-title-${item.id}`).innerText;
-        if(document.getElementById(`c-body-${item.id}`)) item.body = document.getElementById(`c-body-${item.id}`).innerText;
-      });
-      localStorage.setItem("career-logs-list", JSON.stringify(cData));
-
-      const pData = localStorage.getItem("pipeline-logs-list") ? JSON.parse(localStorage.getItem("pipeline-logs-list")) : [...defaultPipelineData];
-      pData.forEach(item => {
-        if(document.getElementById(`p-title-${item.id}`)) item.title = document.getElementById(`p-title-${item.id}`).innerText;
-      });
-      localStorage.setItem("pipeline-logs-list", JSON.stringify(pData));
-
-      document.body.classList.remove('admin-mode');
-      alert("💾 All changes saved successfully.");
-      window.location.reload(); 
+      localStorage.setItem("intro-headline", document.getElementById("intro-headline").innerText);
+      alert("Changes saved."); window.location.reload();
     }
 
-    function switchTab(targetTabId) {
-      document.querySelectorAll('.content-tab').forEach(tab => tab.classList.remove('active'));
-      document.getElementById('tab-' + targetTabId).classList.add('active');
-      document.querySelectorAll('.portfolio-nav-btn').forEach(btn => {
-        btn.classList.remove('text-stone-900', 'bg-stone-200/60'); btn.classList.add('text-stone-600');
-      });
-      const curr = document.getElementById('tab-btn-' + targetTabId);
-      if(curr) { curr.classList.remove('text-stone-600'); curr.classList.add('text-stone-900', 'bg-stone-200/60'); }
-    }
+    document.addEventListener("DOMContentLoaded", () => {
+      if(localStorage.getItem("intro-headline")) document.getElementById("intro-headline").innerText = localStorage.getItem("intro-headline");
+      renderProfileLinkStack();
+    });
+
+    function createNewProfileLinkCard() { alert("Use Admin mode to add links."); }
+    function createNewVentureLog() { alert("Use Admin mode to add logs."); }
   </script>
 </body>
 </html>
